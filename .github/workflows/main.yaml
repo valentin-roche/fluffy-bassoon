@@ -1,4 +1,4 @@
-name: Main workflow
+name: Publish itch
 
 on:
   release:
