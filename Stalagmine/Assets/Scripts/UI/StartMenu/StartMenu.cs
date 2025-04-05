@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,8 @@ namespace UI.Menus
         private GameObject buttonsContainer;
         [SerializeField]
         private GameObject titleContainer;
+        [SerializeField]
+        private CanvasGroup fadeOutCanvas;
 
         private void Start()
         {
@@ -19,7 +22,8 @@ namespace UI.Menus
 
         public void OnStart()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            Tween fadeOutTween = fadeOutCanvas.DOFade(1, 0.5f);
+            fadeOutTween.OnComplete(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1));            
         }
 
         public void OpenSettings()
