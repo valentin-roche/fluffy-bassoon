@@ -1,4 +1,4 @@
-name: Main workflow
+name: Publish itch
 
 on:
   release:
@@ -6,8 +6,6 @@ on:
       - created
     branches:
       - main
-  schedule:
-    - cron:  '0 */3 * * *'
   workflow_dispatch: {}
 
 jobs:
@@ -33,7 +31,7 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
-          projectPath: GameJamChainsaw/
+          projectPath: buildpath-${{ github.run_id }}/
       - name: Set Version
         run: |
           echo "version=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
@@ -41,7 +39,7 @@ jobs:
         uses: robpc/itchio-upload-action@v1
         with:
           path: build/${{ matrix.targetPlatform }}
-          project: kryspou/poole
+          project: ####
           channel: ${{ matrix.targetPlatform }}
           version: ${{ env.version }}
           api-key: ${{ secrets.BUTLER_API_KEY }}
