@@ -2,15 +2,19 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private EnemySO enemySO;
+
+    [SerializeField] private Transform[] spawnPoints;
+
+    public void SpawnEnemy(GameObject enemyPrefab)
     {
-        
+        GameObject newEnemy = Instantiate(enemyPrefab, spawnPoints[0].position, Quaternion.identity);
+        newEnemy.GetComponent<Enemy>().OnSpawn(enemySO, GetComponent<CoreManager>().Core.transform);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        SpawnEnemy(enemyPrefab);
     }
 }

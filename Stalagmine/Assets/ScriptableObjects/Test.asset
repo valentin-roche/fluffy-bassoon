@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   Health: 100
-  Speed: 0
-  Damage: 0
+  Speed: 5
+  Damage: 5

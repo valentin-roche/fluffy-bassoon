@@ -5,13 +5,17 @@ using UnityEngine.EventSystems;
 public class Enemy : MonoBehaviour
 {
     HealthManager HealthManager { get; set; }
-    public EnemySO EnemySO;
+    private EnemySO EnemySO;
 
     public event System.Action OnEnemyDeath;
 
-    private void Start()
+    private Transform target;
+
+    public void OnSpawn(EnemySO enemySO, Transform target)
     {
+        this.EnemySO = enemySO;
         HealthManager = new(EnemySO.Health);
+        this.target = target;
     }
 
     public void DamageEnemy(int damage)
@@ -33,4 +37,12 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void FixedUpdate()
+    {
+        if (target == null) return;
+
+        float step = Time.deltaTime * EnemySO.Speed;
+
+        transform.position = Vector3.MoveTowards(transform.position, target.position, step);
+    }
 }
