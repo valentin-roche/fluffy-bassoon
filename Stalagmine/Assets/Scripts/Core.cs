@@ -33,10 +33,15 @@ public class Core : Building
 
     void DestroyCore()
     {
-        CoreDestroyed.Invoke();
+        //CoreDestroyed.Invoke();
 
         GetComponent<AudioSource>().Play();
         Destroy(gameObject, GetComponent<AudioSource>().clip.length+1);
+    }
+
+    private void OnDestroy()
+    {
+        CoreDestroyed.Invoke();
     }
 }
 

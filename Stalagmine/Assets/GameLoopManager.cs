@@ -6,6 +6,8 @@ public class GameLoopManager : MonoBehaviour
     public bool IsDead = false;
     public bool IsWin = false;
 
+    public GameObject LayerParent;
+
     private void Start()
     {
         GetComponent<CoreManager>().Core.CoreDestroyed += GameLost;
@@ -26,6 +28,10 @@ public class GameLoopManager : MonoBehaviour
         if (IsPlaying)
         {
             if(GetComponent<SpawnManager>().SpawnParent.childCount == 0) IsWin = true;
+        }
+        if(IsDead)
+        {
+            LayerParent.transform.GetChild(0).gameObject.SetActive(false);
         }
     }
 }

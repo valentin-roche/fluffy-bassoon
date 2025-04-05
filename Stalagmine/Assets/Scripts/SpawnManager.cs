@@ -24,6 +24,6 @@ public class SpawnManager : MonoBehaviour
 
         GameObject newEnemy = Instantiate(enemySO.Prefab, sp.point.position + spawnPointDif, Quaternion.identity, SpawnParent);
 
-        newEnemy.GetComponent<Enemy>().OnSpawn(enemySO, GetComponent<CoreManager>().Core.transform);
+        newEnemy.GetComponent<Enemy>().OnSpawn(enemySO, GetComponent<CoreManager>().Core.gameObject.transform);
     }
 }
