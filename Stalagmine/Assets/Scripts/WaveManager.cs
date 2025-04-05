@@ -33,7 +33,7 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void StartWave()
     {
         SpawnWave(50);
     }

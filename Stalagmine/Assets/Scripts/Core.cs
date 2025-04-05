@@ -1,9 +1,11 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 public class Core : Building
 {
     HealthManager HealthManager { get; set; }
+
+    public event Action CoreDestroyed;
 
     private void Start()
     {
@@ -31,6 +33,8 @@ public class Core : Building
 
     void DestroyCore()
     {
+        CoreDestroyed.Invoke();
+
         GetComponent<AudioSource>().Play();
         Destroy(gameObject, GetComponent<AudioSource>().clip.length+1);
     }

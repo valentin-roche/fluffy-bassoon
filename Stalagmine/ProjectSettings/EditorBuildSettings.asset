@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/UI/StartMenu.unity
     guid: 7191d5331ca09524d930ea84f196d630
   - enabled: 1
+    path: Assets/Scenes/Protoscene.unity
+    guid: b2c6d3c729dbdb94fb05a54b0cf9dc10
+  - enabled: 1
     path: Assets/Scenes/UI/HUD.unity
     guid: 5afa4f6a6bbd96a44831c2460fe9facf
   m_configObjects:

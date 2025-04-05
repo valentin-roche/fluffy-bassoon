@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class SpawnManager : MonoBehaviour
 {
-    int prout = 0;
+    public Transform SpawnParent;
     [Serializable]
     struct SpawnPoint
     {
@@ -22,9 +22,8 @@ public class SpawnManager : MonoBehaviour
 
         Vector3 spawnPointDif = new Vector3(Random.Range(-sp.size.x, sp.size.x), 0, Random.Range(-sp.size.y, sp.size.y));
 
-        GameObject newEnemy = Instantiate(enemySO.Prefab, sp.point.position + spawnPointDif, Quaternion.identity);
+        GameObject newEnemy = Instantiate(enemySO.Prefab, sp.point.position + spawnPointDif, Quaternion.identity, SpawnParent);
 
-        newEnemy.name = "" + prout++;
         newEnemy.GetComponent<Enemy>().OnSpawn(enemySO, GetComponent<CoreManager>().Core.transform);
     }
 }

@@ -22,4 +22,13 @@ public class InputManager : MonoBehaviour
         }
         return lastPosition;
     }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            GetComponentInParent<WaveManager>().StartWave();
+            GetComponentInParent<GameLoopManager>().IsPlaying = true;
+        }
+    }
 }
