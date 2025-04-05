@@ -13,6 +13,11 @@ public class Core : Building
     public void Hit(int damage)
     {
         HealthManager.LoseHealth(damage);
+
+        if (HealthManager.IsDead())
+        {
+            DestroyCore();
+        }
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -22,6 +27,12 @@ public class Core : Building
             Hit(collider.gameObject.GetComponent<Enemy>().GetSO().Damage);
             collider.gameObject.GetComponent<Enemy>().DestroyEnemy();
         }
+    }
+
+    void DestroyCore()
+    {
+        GetComponent<AudioSource>().Play();
+        Destroy(gameObject, GetComponent<AudioSource>().clip.length+1);
     }
 }
 
