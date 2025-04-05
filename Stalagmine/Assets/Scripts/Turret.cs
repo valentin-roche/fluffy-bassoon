@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,25 +9,20 @@ public class Turret : Building
 
     GameObject currentTarget;
 
-    float timeElapsed = 0;
-
     List<GameObject> targets;
 
     private void Start()
     {
         targets = new List<GameObject>();
+        InvokeRepeating("ShootAction", 0.0f, (1.0f / TurretSO.FireRate));
     }
 
-    private void FixedUpdate()
+
+    void ShootAction()
     {
         if (currentTarget != null)
         {
-            timeElapsed += Time.deltaTime;
-            if(timeElapsed > (1.0f/TurretSO.FireRate))
-            {
-                ShootAtTarget();
-                timeElapsed = 0;
-            }
+            ShootAtTarget();
         }
     }
 
@@ -34,19 +30,43 @@ public class Turret : Building
     {
         if (collider.gameObject.CompareTag("Enemy"))
         {
-            targets.Add(collider.gameObject);
-            currentTarget = targets[0];
-        }
+            Debug.Log("Enemy in range " + collider.gameObject.name);
 
-        Debug.Log("Bah frérot??");
+            targets.Add(collider.gameObject);
+            if(currentTarget == null)
+                SetNewTarget();
+        }
+    }
+
+    void RemoveCurrentTarget()
+    {
+        if(currentTarget != null)
+        {
+            targets.Remove(currentTarget);
+        }
+    }
+
+    void SetNewTarget()
+    {
+        Debug.Log("Setting new target");
+
+        if(targets.Count > 0)
+        {
+            currentTarget = targets[0];
+            currentTarget.GetComponent<Enemy>().OnEnemyDeath += RemoveCurrentTarget;
+            currentTarget.GetComponent<Enemy>().OnEnemyDeath += SetNewTarget;
+
+            Debug.Log("New target is " + currentTarget.name);
+        }
     }
 
     void ShootAtTarget()
     {
+        Debug.Log("PIOU PIOU");
         switch (TurretSO.Projectile)
         {
             case TurretSO.ProjectileType.NORMAL:
-                //Call Damage on entity
+                currentTarget.GetComponent<Enemy>().DamageEnemy(TurretSO.Damage);
                 break;
             case TurretSO.ProjectileType.FIRE:
                 //Call SetFire on entity
@@ -56,7 +76,6 @@ public class Turret : Building
                 break;
                 default: break;
         }
-        Debug.Log("PIOU PIOU");
 
         //Do cool particle shit
     }

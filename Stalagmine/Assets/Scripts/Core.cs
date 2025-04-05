@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Core : Building
@@ -12,12 +13,13 @@ public class Core : Building
 
 class HealthManager
 {
-    readonly int MaxHealth = 100;
-    int Health { get; set; }
+    int MaxHealth { get; }
+    public int Health { get; set; }
 
-    public HealthManager()
+    public HealthManager(int maxHealth)
     {
-        Health = MaxHealth;
+        MaxHealth = maxHealth;
+        Health = maxHealth;
     }
 
     public void LoseHealth(int healthLost)
@@ -29,4 +31,6 @@ class HealthManager
     {
         Health += healthGained;
     }
+
+    public bool IsDead() { return Health <= 0; }
 }
