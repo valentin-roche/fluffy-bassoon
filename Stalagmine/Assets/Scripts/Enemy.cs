@@ -4,10 +4,13 @@ using UnityEngine.EventSystems;
 
 public class Enemy : MonoBehaviour
 {
-    HealthManager HealthManager { get; set; }
-    private EnemySO EnemySO;
+    bool isDyingHelpHim = false;
+    public bool IsDyingHelpHim => isDyingHelpHim;
 
-    public event System.Action OnEnemyDeath;
+    HealthManager HealthManager { get; set; }
+    [SerializeField] private EnemySO EnemySO;
+
+    public event System.Action<GameObject> OnEnemyDeath;
 
     private Transform target;
 
@@ -18,6 +21,11 @@ public class Enemy : MonoBehaviour
         this.target = target;
     }
 
+    public EnemySO GetSO()
+    {
+        return EnemySO;
+    }
+
     public void DamageEnemy(int damage)
     {
         GetComponent<AudioSource>().Play();
@@ -25,9 +33,19 @@ public class Enemy : MonoBehaviour
 
         if (HealthManager.IsDead())
         {
-            OnEnemyDeath.Invoke();
-            Destroy(gameObject, GetComponent<AudioSource>().clip.length); // On verra après
+            DestroyEnemy();
         }
+    }
+
+    public void DestroyEnemy()
+    {
+        isDyingHelpHim = true;
+
+        GetComponent<AudioSource>().Play();
+
+        OnEnemyDeath?.Invoke(this.gameObject);
+
+        Destroy(gameObject, GetComponent<AudioSource>().clip.length); // On verra après
     }
 
     IEnumerator waitCoroutine()

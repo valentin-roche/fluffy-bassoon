@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be956970946e1b34f92421d2609062e2, type: 3}
-  m_Name: Test
+  m_Name: Tank
   m_EditorClassIdentifier: 
-  enemyType: 0
-  Health: 100
-  Speed: 5
-  Damage: 5
+  enemyType: 2
+  Health: 250
+  Speed: 1
+  Damage: 12
+  Prefab: {fileID: 5552586813357147970, guid: 5068663f52bd93e43bc3d08a9ac55205, type: 3}

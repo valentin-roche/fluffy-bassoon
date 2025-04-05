@@ -14,4 +14,6 @@ public class EnemySO : ScriptableObject
     public int Health;
     public float Speed;
     public int Damage;
+
+    public GameObject Prefab;
 }

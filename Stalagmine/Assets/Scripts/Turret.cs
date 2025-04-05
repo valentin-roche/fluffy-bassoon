@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Turret : Building
@@ -14,6 +15,7 @@ public class Turret : Building
     private void Start()
     {
         targets = new List<GameObject>();
+        GetComponent<SphereCollider>().radius = TurretSO.Range;
         InvokeRepeating("ShootAction", 0.0f, (1.0f / TurretSO.FireRate));
     }
 
@@ -30,10 +32,15 @@ public class Turret : Building
     {
         if (collider.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("Enemy in range " + collider.gameObject.name);
+            var enemy = collider.gameObject.GetComponent<Enemy>();
+
+            if (enemy.IsDyingHelpHim) return;
 
             targets.Add(collider.gameObject);
-            if(currentTarget == null)
+
+            collider.gameObject.GetComponent<Enemy>().OnEnemyDeath += RemoveTarget;
+
+            if (currentTarget == null)
                 SetNewTarget();
         }
     }
@@ -48,6 +55,10 @@ public class Turret : Building
 
     void RemoveTarget(GameObject target)
     {
+        
+
+        Debug.Log(name + " removed enemy " + target.name);
+
         targets.Remove(target);
         if(target == currentTarget)
         {
@@ -62,25 +73,48 @@ public class Turret : Building
         {
             targets.Remove(currentTarget);
         }
+        SetNewTarget();
     }
 
     void SetNewTarget()
     {
-        Debug.Log("Setting new target");
-
         if(targets.Count > 0)
         {
-            currentTarget = targets[0];
-            currentTarget.GetComponent<Enemy>().OnEnemyDeath += RemoveCurrentTarget;
-            currentTarget.GetComponent<Enemy>().OnEnemyDeath += SetNewTarget;
+            string text = this.name + '\n';
 
-            Debug.Log("New target is " + currentTarget.name);
+            foreach (GameObject target in targets)
+            {
+                if(target == null)
+                {
+                    text += "NULL ICI";
+                }else
+                    text += target.name;
+
+                text += '\n';
+            }
+
+            Debug.Log(text);
+
+            //if (targets.Count > 1)
+            //{
+            //    Random.Range(0, targets.Count - 1);
+            //}
+            currentTarget = targets[0];
+
+            if(currentTarget == null)
+            {
+                Debug.Log("Nul");
+
+                return;
+            }
+
+            //currentTarget.GetComponent<Enemy>().OnEnemyDeath += RemoveTarget;
+            //currentTarget.GetComponent<Enemy>().OnEnemyDeath += SetNewTarget;
         }
     }
 
     void ShootAtTarget()
     {
-        Debug.Log("PIOU PIOU");
         switch (TurretSO.Projectile)
         {
             case TurretSO.ProjectileType.NORMAL:
