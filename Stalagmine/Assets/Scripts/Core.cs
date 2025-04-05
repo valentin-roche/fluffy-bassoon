@@ -41,7 +41,7 @@ public class Core : Building
 
     private void OnDestroy()
     {
-        CoreDestroyed.Invoke();
+        CoreDestroyed?.Invoke();
     }
 }
 

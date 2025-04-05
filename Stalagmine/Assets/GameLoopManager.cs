@@ -29,9 +29,13 @@ public class GameLoopManager : MonoBehaviour
         {
             if(GetComponent<SpawnManager>().SpawnParent.childCount == 0) IsWin = true;
         }
-        if(IsDead)
+        if(IsWin)
         {
             LayerParent.transform.GetChild(0).gameObject.SetActive(false);
+        }
+        if (IsDead)
+        {
+
         }
     }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Turret
   m_EditorClassIdentifier: 
   Range: 8
-  FireRate: 2
+  FireRate: 5
   Cost: 50
-  Damage: 40
+  Damage: 100
   Projectile: 0
