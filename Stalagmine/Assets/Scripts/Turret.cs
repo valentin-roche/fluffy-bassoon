@@ -38,6 +38,24 @@ public class Turret : Building
         }
     }
 
+    private void OnTriggerExit(Collider collider)
+    {
+        if (collider.gameObject.CompareTag("Enemy"))
+        {
+            RemoveTarget(collider.gameObject);
+        }
+    }
+
+    void RemoveTarget(GameObject target)
+    {
+        targets.Remove(target);
+        if(target == currentTarget)
+        {
+            currentTarget = null;
+            SetNewTarget();
+        }
+    }
+
     void RemoveCurrentTarget()
     {
         if(currentTarget != null)
