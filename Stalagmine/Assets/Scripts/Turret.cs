@@ -55,10 +55,6 @@ public class Turret : Building
 
     void RemoveTarget(GameObject target)
     {
-        
-
-        Debug.Log(name + " removed enemy " + target.name);
-
         targets.Remove(target);
         if(target == currentTarget)
         {
@@ -80,36 +76,12 @@ public class Turret : Building
     {
         if(targets.Count > 0)
         {
-            string text = this.name + '\n';
-
-            foreach (GameObject target in targets)
-            {
-                if(target == null)
-                {
-                    text += "NULL ICI";
-                }else
-                    text += target.name;
-
-                text += '\n';
-            }
-
-            Debug.Log(text);
-
-            //if (targets.Count > 1)
-            //{
-            //    Random.Range(0, targets.Count - 1);
-            //}
             currentTarget = targets[0];
 
             if(currentTarget == null)
             {
-                Debug.Log("Nul");
-
                 return;
             }
-
-            //currentTarget.GetComponent<Enemy>().OnEnemyDeath += RemoveTarget;
-            //currentTarget.GetComponent<Enemy>().OnEnemyDeath += SetNewTarget;
         }
     }
 

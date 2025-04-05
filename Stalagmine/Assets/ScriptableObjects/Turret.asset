@@ -15,5 +15,5 @@ MonoBehaviour:
   Range: 5
   FireRate: 2
   Cost: 50
-  Damage: 100
+  Damage: 40
   Projectile: 0
