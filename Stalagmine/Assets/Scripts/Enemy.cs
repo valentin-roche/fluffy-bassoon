@@ -1,13 +1,14 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Utils;
 
 public class Enemy : MonoBehaviour
 {
     bool isDyingHelpHim = false;
     public bool IsDyingHelpHim => isDyingHelpHim;
 
-    HealthManager HealthManager { get; set; }
+    private Utils.HealthManager healthManager { get; set; }
     [SerializeField] private EnemySO EnemySO;
 
     public event System.Action<GameObject> OnEnemyDeath;
@@ -17,7 +18,7 @@ public class Enemy : MonoBehaviour
     public void OnSpawn(EnemySO enemySO, Transform target)
     {
         this.EnemySO = enemySO;
-        HealthManager = new(EnemySO.Health);
+        healthManager = new Utils.HealthManager(EnemySO.Health);
         this.target = target;
     }
 
@@ -29,9 +30,9 @@ public class Enemy : MonoBehaviour
     public void DamageEnemy(int damage)
     {
         GetComponent<AudioSource>().Play();
-        HealthManager.LoseHealth(damage);
+        healthManager.LoseHealth(damage);
 
-        if (HealthManager.IsDead())
+        if (healthManager.IsDead())
         {
             DestroyEnemy();
         }

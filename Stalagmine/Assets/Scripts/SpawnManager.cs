@@ -15,6 +15,7 @@ public class SpawnManager : MonoBehaviour
     }
 
     [SerializeField] private List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
+    [SerializeField] private Core core;
 
     public void SpawnEnemy(EnemySO enemySO)
     {
@@ -24,6 +25,6 @@ public class SpawnManager : MonoBehaviour
 
         GameObject newEnemy = Instantiate(enemySO.Prefab, sp.point.position + spawnPointDif, Quaternion.identity, SpawnParent);
 
-        newEnemy.GetComponent<Enemy>().OnSpawn(enemySO, GetComponent<CoreManager>().Core.gameObject.transform);
+        newEnemy.GetComponent<Enemy>().OnSpawn(enemySO, core.gameObject.transform);
     }
 }

@@ -1,3 +1,4 @@
+using GameState;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
@@ -9,6 +10,9 @@ public class InputManager : MonoBehaviour
 
     [SerializeField]
     private LayerMask placementLayermask;
+
+    [SerializeField]
+    private GameManager gameManager;
 
     public Vector3 GetSelectedMapPosition()
     {
@@ -27,8 +31,7 @@ public class InputManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            GetComponentInParent<WaveManager>().StartWave();
-            GetComponentInParent<GameLoopManager>().IsPlaying = true;
+            gameManager.StartGame();
         }
     }
 }

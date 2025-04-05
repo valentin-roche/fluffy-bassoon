@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -17,13 +18,20 @@ namespace GameState
         // Active grid is always 0
         private List<Grids.GameGrid> layers;
 
+        internal void GoToNextLayer()
+        {
+            Debug.Log("La ca pete");
+        }
+
+        public void Start()
+        {
+            gridFactory = new Grids.GridFactory();
+            //layers.Add(gridFactory.InitMaps());
+            return;
+        }
 
         private void Update()
         {
-            Vector3 mousePos = inputManager.GetSelectedMapPosition();
-            Vector3Int gridPos = layers.ElementAt(0).WorldToCell(mousePos);
-            mouseIndicator.transform.position = mousePos;
-            cellIndicator.transform.position = layers.ElementAt(0).CellToWorld(gridPos);
         }
     }
 

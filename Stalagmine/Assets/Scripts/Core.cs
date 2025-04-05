@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Core : Building
 {
-    HealthManager HealthManager { get; set; }
+    private Utils.HealthManager HealthManager { get; set; }
 
     public event Action CoreDestroyed;
 
@@ -43,28 +43,4 @@ public class Core : Building
     {
         CoreDestroyed?.Invoke();
     }
-}
-
-class HealthManager
-{
-    int MaxHealth { get; }
-    public int Health { get; set; }
-
-    public HealthManager(int maxHealth)
-    {
-        MaxHealth = maxHealth;
-        Health = maxHealth;
-    }
-
-    public void LoseHealth(int healthLost)
-    {
-        Health -= healthLost;
-    }
-
-    public void GainHealth(int healthGained)
-    {
-        Health += healthGained;
-    }
-
-    public bool IsDead() { return Health <= 0; }
 }
