@@ -98,6 +98,8 @@ public class Turret : Building
             case TurretSO.ProjectileType.ICE:
                 //Call Freeze on Entity
                 break;
+            case TurretSO.ProjectileType.ZONE:
+                break;
                 default: break;
         }
 

@@ -13,6 +13,7 @@ public class TurretSO : ScriptableObject
     {
         NORMAL,
         FIRE,
-        ICE
+        ICE,
+        ZONE
     }
 }
