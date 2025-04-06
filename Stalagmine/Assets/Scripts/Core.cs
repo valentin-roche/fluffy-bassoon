@@ -9,7 +9,7 @@ public class Core : Building
 
     private void Start()
     {
-        HealthManager = new(100);
+        HealthManager = new(100000000);
     }
 
     public void Hit(int damage)
