@@ -1,13 +1,12 @@
 using DG.Tweening;
-using System;
 using System.Collections.Generic;
 using UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
 {
-    [SerializeField]
-    private CanvasGroup fadeInCanvas;
+    [Header("Turret Selection")]
     [SerializeField] 
     private GameObject turretDisplayPrefab;
     [SerializeField]
@@ -17,18 +16,26 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     [SerializeField]
     private RectTransform turretSelectionPanel;
 
-    private List<GameObject> turretsObjects;
+    [Header("Pause Menu")]
+    [SerializeField]
+    private GameObject pauseMenu;
 
-    public event Action SendDataSelection;
+    [Header("Tutorials")]
+    [SerializeField]
+    private RectTransform tutoPopupFirst;
+    [SerializeField]
+    private RectTransform tutoPopupSecond;
+
+    private List<GameObject> turretsObjects;
 
     private bool isSelectionShowned = false;
 
     void Start()
     {
         ToggleShowSelectionPanel(false);
-        fadeInCanvas.alpha = 1.0f;
-        fadeInCanvas.DOFade(0, 0.5f);
         PopulateTurretList();
+
+        ShowTutoPanel(tutoPopupFirst);
     }
 
     private void OnDestroy()
@@ -37,7 +44,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         {
             foreach (GameObject obj in turretsObjects)
             {
-                if(obj.GetComponent<TurretDisplay>() is TurretDisplay display)
+                if(obj != null && obj.GetComponent<TurretDisplay>() is TurretDisplay display)
                 {
                     display.TurretSelected -= OnTurretSelected;
                 }
@@ -50,6 +57,19 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         if (Input.GetKeyDown(KeyCode.F))
         {
             ToggleShowSelectionPanel(!isSelectionShowned);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(pauseMenu.activeInHierarchy)
+            {
+                Continue();
+            }
+            else
+            {               
+                Time.timeScale = 0;
+                pauseMenu.SetActive(true);
+            }
         }
     }
 
@@ -84,5 +104,47 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         isSelectionShowned = show;
         Vector2 destination = show ? new Vector3(turretSelectionPanel.anchoredPosition.x, 0f) : new Vector3(turretSelectionPanel.anchoredPosition.x, -turretSelectionPanel.sizeDelta.y);
         turretSelectionPanel.DOAnchorPos(destination, 0.25f);
+    }
+
+    public void Continue()
+    {
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1.0f;
+    }
+
+    public void ReturnToStartMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void ShowTutoPanel(RectTransform transform)
+    {
+
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(transform.DOAnchorPos(new Vector2(transform.anchoredPosition.x, 0f), 0.5f).SetEase(Ease.OutBack));
+        if(transform.GetComponent<CanvasGroup>() is CanvasGroup canvas)
+        {
+            sequence.Join(canvas.DOFade(1f, 0.25f));
+            canvas.blocksRaycasts = true;
+        }
+        sequence.Play();
+    }
+
+    public void HideTutoPanel(RectTransform transform)
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(transform.DOAnchorPos(new Vector2(transform.anchoredPosition.x, -300f), 0.5f).SetEase(Ease.OutQuart));
+        if (transform.GetComponent<CanvasGroup>() is CanvasGroup canvas)
+        {
+            sequence.Join(canvas.DOFade(0f, 0.5f));
+            canvas.blocksRaycasts = false;
+        }
+
+        if(transform == tutoPopupFirst)
+        {
+            sequence.OnComplete(() => ShowTutoPanel(tutoPopupSecond));
+        }
+
+        sequence.Play();
     }
 }
