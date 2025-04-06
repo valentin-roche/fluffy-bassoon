@@ -16,4 +16,5 @@ MonoBehaviour:
   Health: 60
   Speed: 2
   Damage: 10
+  Reward: 1
   Prefab: {fileID: 262711480994724371, guid: 4e2c9b272c2e7fe44adc4012bef68f6f, type: 3}

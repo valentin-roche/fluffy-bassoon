@@ -8,6 +8,12 @@ namespace UI
     public class TurretDisplay : MonoBehaviour
     {
         [SerializeField]
+        private Button button;
+        [SerializeField]
+        private CanvasGroup canvas;
+        [SerializeField]
+        private GameObject redFilter;
+        [SerializeField]
         private Image turretIcon;
         [SerializeField]
         private TextMeshProUGUI turretName;
@@ -21,6 +27,7 @@ namespace UI
         private TextMeshProUGUI rangeStat;
 
         private TurretDefinition turretDefinition;
+        public TurretDefinition TurretDefinition => turretDefinition;
 
         public event Action<TurretSO> TurretSelected;
 
@@ -42,6 +49,13 @@ namespace UI
         public void Clicked()
         {
             TurretSelected?.Invoke(turretDefinition.Turret);
+        }
+
+        public void Disable(bool disable)
+        {
+            button.interactable = !disable;
+            canvas.alpha = disable ? 0.5f : 1f;
+            redFilter.SetActive(disable);
         }
     }
 }
