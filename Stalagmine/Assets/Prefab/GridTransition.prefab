@@ -59,6 +59,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameGrid
       objectReference: {fileID: 0}
+    - target: {fileID: 5222287977125647891, guid: 2ec386978581a2d488091b8890642d4b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6414072073682106045, guid: 2ec386978581a2d488091b8890642d4b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.8881364

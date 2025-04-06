@@ -6,7 +6,7 @@ namespace Grids
     {
         private GameGrid upperGrid;
         private GameGrid lowerGrid;
-        private Vector3 lowerGridOffset = new Vector3(0, -15 , 0);
+        private Vector3 lowerGridOffset = new Vector3(0, 40 , 0);
         [SerializeField]
         public GameGrid GameGridPrefab;
         [SerializeField]
@@ -14,12 +14,14 @@ namespace Grids
 
         private void Start()
         {
-            upperGrid = Instantiate<GameGrid>(GameGridPrefab, upperGrid.transform.position - lowerGridOffset, Quaternion.identity, this.transform);
+            upperGrid = Instantiate<GameGrid>(GameGridPrefab, Vector3.zero, Quaternion.identity, this.transform);
+            upperGrid.gameObject.SetActive(true);
             for (int i = 0; i < InitialVoidNum; i++)
             {
                 upperGrid.MakeVoidAt(GetRandomCellPos());
             }
             lowerGrid = Instantiate(GameGridPrefab, upperGrid.transform.position - lowerGridOffset, Quaternion.identity, this.transform);
+            lowerGrid.gameObject.SetActive(true);
         }
         private void PushLowerGrid()
         {
