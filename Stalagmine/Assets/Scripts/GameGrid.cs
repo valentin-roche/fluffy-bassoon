@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+using System;
 
 namespace Grids
 {
@@ -22,7 +22,12 @@ namespace Grids
             new Vector2(0, -1),
             new Vector2(0, 1)
         };
+
+
         private Vector3[] vertices;
+        List<int>[] trisWithVertex;
+        bool[] trianglesDisabled;
+
 
         void Start()
         {
@@ -61,7 +66,7 @@ namespace Grids
             Mesh newMesh = new Mesh();
 
             // Handle vertices
-            vertices = new Vector3[(gridSize.x + 1) * (gridSize.y + 1)];
+            Vector3[] vertices = new Vector3[(gridSize.x + 1) * (gridSize.y + 1)];
             Vector2[] uv = new Vector2[vertices.Length];
             for (int i = 0, y = 0; y <= gridSize.y; y++)
             {
@@ -73,10 +78,12 @@ namespace Grids
                 }
             }
             newMesh.vertices = vertices;
+            this.vertices = vertices;
             newMesh.uv = uv;
 
             // Handle triangles
             int[] triangles = new int[gridSize.x * gridSize.y * 6];
+            trianglesDisabled = new bool[triangles.Length];
 
             for (int ti = 0, vi = 0, y = 0; y < gridSize.y; y++, vi++)
             {
@@ -88,10 +95,33 @@ namespace Grids
                     triangles[ti + 5] = vi + gridSize.x + 2;
                 }
             }
+
+            trisWithVertex = new List<int>[vertices.Length];
+            for (int i = 0; i < vertices.Length; ++i)
+            {
+                trisWithVertex[i] = IndexOf(triangles, i);
+            }
+
             newMesh.triangles = triangles;
+
+
             mesh.RecalculateNormals();
 
             GetComponent<MeshFilter>().mesh = newMesh;
+        }
+
+        private List<int> IndexOf(int[] triangles, int i)
+        {
+            List<int> result = new List<int>();
+            for (int t = 0; t < triangles.Length; ++t)
+            {
+                if (triangles.GetValue(t).Equals(i))
+                {
+                    result.Add(t);
+                }
+            }
+            result.Sort();
+            return result;
         }
 
         private Vector3 GetCellCenterCoordInGrid(int y, int x)
