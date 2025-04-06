@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d73cb8cef783c564f82eb80aeb7bf546, type: 3}
   m_Name: Turret
   m_EditorClassIdentifier: 
-  Range: 8
-  FireRate: 5
+  Range: 5
+  FireRate: 3
   Cost: 50
-  Damage: 100
+  Damage: 40
   Projectile: 0
+  Prefab: {fileID: 1000013566905100, guid: b5ceca2fab4f06f49aa235f4f428275a, type: 3}
