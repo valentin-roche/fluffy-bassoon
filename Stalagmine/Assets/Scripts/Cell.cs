@@ -7,7 +7,8 @@ namespace Grids
     {
         Empty, 
         Void,   
-        Full    
+        Full, 
+        Eternal
     }
 
     public class Cell: MonoBehaviour
@@ -35,18 +36,27 @@ namespace Grids
 
         public void MakeVoid()
         {
-            if (Status == Status.Full)
+            if (Status != Status.Eternal)
             {
-                Destroy(Content.gameObject);
+                if (Status == Status.Full)
+                {
+                    Destroy(Content.gameObject);
+                }
+                Status = Status.Void;
+
             }
-            Status = Status.Void;
+            
         }
 
         public void Clear()
         {
             if (Content != null)
                 Object.Destroy(Content);
-            Status = Status.Empty;
+            if (Status != Status.Eternal)
+            {
+                Status = Status.Empty;
+            }
+
         }
     }
 }

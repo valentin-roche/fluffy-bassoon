@@ -12,11 +12,13 @@ namespace Grids
         [SerializeField] 
         public Vector2Int gridSize = new Vector2Int(11,11);
         [SerializeField] 
-        private Grid grid;
+        public Grid grid;
         public List<Cell> VoidCells;
         public List<Cell> UsedCells;
+        public List<Cell> EternalCells; 
         private Mesh mesh;
 
+        
         public static List<Vector2> Directions = new List<Vector2>
         {
             new Vector2(1, 0),
@@ -38,16 +40,26 @@ namespace Grids
             transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
             VoidCells = new List<Cell>();
             UsedCells = new List<Cell>();
+            UsedCells.Add(new Cell(new Vector2(0, 0), Status.Full)); 
+            for(int i=-2; i<2; i++)
+            {
+                for(int j=-2; j<2; j++)
+                {
+                    EternalCells.Add(new Cell(new Vector2(i, j), Status.Eternal));
+                }
+            }
+            Debug.Log(EternalCells.Count); 
             mesh = new Mesh();
             mesh.name = "Grid";
             RefreshMesh();
 
         }
 
-        public GameGrid(List<Cell> VoidCells, List<Cell> UsedCells)
+        public GameGrid(List<Cell> VoidCells, List<Cell> UsedCells, List<Cell> eternalCells)
         {
             this.VoidCells = VoidCells;
             this.UsedCells = UsedCells;
+            EternalCells = eternalCells;
         }
 
         public void Update()
@@ -59,17 +71,28 @@ namespace Grids
 
         }
 
+        
+
         public void ActualizeGrid()
         {
             foreach(Cell voidCell in VoidCells)
             {
                 foreach (Vector2 ouais in Directions) {
                     Cell neighb = getCellAt(voidCell.Position - ouais);
-                    if (neighb.Status != Status.Void)
+                    if(neighb.Status != Status.Eternal)
                     {
-                        neighb.MakeVoid();
-                        VoidCells.Insert(0, neighb);
+                        if (neighb.Status == Status.Full)
+                        {
+
+                            neighb.MakeVoid();
+                            VoidCells.Insert(0, neighb);
+                            if (getUsedCellAt(neighb.Position))
+                            {
+                                UsedCells.Remove(getUsedCellAt(neighb.Position));
+                            }
+                        }
                     }
+                    
                 }
             }
             RefreshMesh();
@@ -187,6 +210,18 @@ namespace Grids
             return new Cell(pos); 
         }
 
+        public Cell getUsedCellAt(Vector2 pos)
+        {
+            foreach (Cell usedCell in UsedCells)
+            {
+                if (usedCell.Position == pos)
+                {
+                    return usedCell;
+                }
+            }
+            return null; 
+        }
+
         public bool isCellEmpty(Vector2 pos)
         {
             foreach (Cell voidCell in VoidCells)
@@ -216,12 +251,22 @@ namespace Grids
         public void SetContentAt(Vector2 pos, GameObject go)
         {
             getCellAt(pos).SetContent(go);
+            UsedCells.Add(getCellAt(pos)); 
         }
 
 
         public List<Cell> getVoidCells()
         {
             return VoidCells;
+        }
+
+        public bool isVectorInGridGame(Vector2 Pos)
+        { 
+            if (-gridSize.x < Pos.x && Pos.x < gridSize.x && -gridSize.y < Pos.y && Pos.y < gridSize.y)
+            {
+                return true;
+            }
+            return false;
         }
     }
 

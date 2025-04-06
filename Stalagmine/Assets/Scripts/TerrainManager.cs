@@ -15,7 +15,9 @@ namespace GameState
         [SerializeField]
         private GameObject turretManager;
 
-        private Vector3Int selectedCellPos; 
+        private Vector3Int selectedCellPos;
+        [SerializeField]
+        private GameObject cellIndicator;
 
         public bool OnClickLeftMouseToBuild()
         {
@@ -24,33 +26,50 @@ namespace GameState
                 Vector3 mousePos = inputManager.GetSelectedMapPosition();
                 Vector3Int gridPos = gridTransition.upperGrid.gameObject.GetComponent<Grid>().WorldToCell(mousePos);
                 Vector2 gridPos2d = new Vector2(gridPos.x, gridPos.z);
-
-                if (gridTransition.upperGrid.isCellEmpty(gridPos2d))
+                if(gridTransition.upperGrid.isVectorInGridGame(gridPos2d))
                 {
-                    selectedCellPos = gridPos; 
-                    return true;
+                    if (gridTransition.upperGrid.isCellEmpty(gridPos2d))
+                    {
+                        selectedCellPos = gridPos;
+                        //HighlightSelectedCellFromUpperGrid(); 
+                        return true;
+                    }
                 }
-                
-
             }
             return false;  
         }
+
+        /*public void HighlightSelectedCellFromUpperGrid()
+        {
+            Vector3 selectCellGridCenter = SnapToGrid(gridTransition.upperGrid.grid,selectedCellPos);
+            Vector3 selectCellGridToWorld = gridTransition.upperGrid.grid.CellToWorld(new Vector3Int((int)selectCellGridCenter.x,(int)selectCellGridCenter.y, (int)selectCellGridCenter.z)); 
+            cellIndicator.transform.position = selectCellGridToWorld;
+        }*/
+
+
         public void BuildTurret(TurretSO turretSo)
         {
             if (selectedCellPos != null)
             {
-                Vector2 cellPos2d = new Vector2(selectedCellPos.x, selectedCellPos.z);
-                GameObject turretGo = Instantiate(turretSo.Prefab, SnapToGrid(gridTransition.upperGrid.gameObject.GetComponent<Grid>(), selectedCellPos), Quaternion.identity, turretManager.transform);
-                gridTransition.upperGrid.SetContentAt(cellPos2d, turretGo);
+                if (selectedCellPos != null)
+                {
+                    Vector2 cellPos2d = new Vector2(selectedCellPos.x, selectedCellPos.z);
+                    
+                    GameObject turretGo = Instantiate(turretSo.Prefab, SnapToGrid(gridTransition.upperGrid.gameObject.GetComponent<Grid>(), selectedCellPos), Quaternion.identity, turretManager.transform);
+                    turretGo.name = selectedCellPos.ToString(); 
+                    gridTransition.upperGrid.SetContentAt(cellPos2d, turretGo);
+                    Debug.Log(gridTransition.upperGrid.UsedCells.Count); 
+                }
             }
         }
         public Vector3 SnapToGrid(Grid grid, Vector3 pos)
         {
-            //Vector3Int cellPos = grid.WorldToCell(pos);
             pos = grid.GetCellCenterWorld(selectedCellPos);
             pos.y = 0; 
             return pos;
         }
+
+        
     }
 
 }
