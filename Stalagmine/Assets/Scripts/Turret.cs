@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
+using static UnityEngine.GraphicsBuffer;
 
 public class Turret : Building
 {
@@ -16,7 +18,9 @@ public class Turret : Building
     {
         targets = new List<GameObject>();
         GetComponent<SphereCollider>().radius = TurretSO.Range;
-        InvokeRepeating("ShootAction", 0.0f, (1.0f / TurretSO.FireRate));
+        GetComponentInChildren<Light>().spotAngle = TurretSO.Range*10;
+        GetComponentInChildren<Light>().innerSpotAngle = TurretSO.Range*5;
+        InvokeRepeating("ShootAction", 0.0f, ((1.0f + Random.Range(-0.05f, 0.05f)) / TurretSO.FireRate));
     }
 
 
@@ -85,8 +89,18 @@ public class Turret : Building
         }
     }
 
+    private void Update()
+    {
+
+        if(currentTarget !=null)
+            transform.LookAt(currentTarget.transform);
+    }
+
     void ShootAtTarget()
     {
+        GetComponent<Animator>().SetTrigger("Shoot");
+        GetComponent<AudioSource>().Play();
+
         switch (TurretSO.Projectile)
         {
             case TurretSO.ProjectileType.NORMAL:
@@ -102,6 +116,7 @@ public class Turret : Building
                 break;
                 default: break;
         }
+
 
         //Do cool particle shit
     }
