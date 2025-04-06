@@ -9,6 +9,8 @@ using static UnityEngine.GraphicsBuffer;
 public class Turret : Building
 {
     public TurretSO TurretSO;
+    public Light Spotlight;
+    public Light Gunlight;
 
     GameObject currentTarget;
 
@@ -20,8 +22,8 @@ public class Turret : Building
 
         targets = new List<GameObject>();
         GetComponent<SphereCollider>().radius = TurretSO.Range;
-        GetComponentInChildren<Light>().spotAngle = (TurretSO.Range*10);
-        GetComponentInChildren<Light>().innerSpotAngle = (TurretSO.Range*5);
+        Spotlight.spotAngle = (TurretSO.Range*10);
+        Spotlight.innerSpotAngle = (TurretSO.Range*5);
         InvokeRepeating("ShootAction", 0.0f, ((1.0f + Random.Range(-0.05f, 0.05f)) / TurretSO.FireRate));
     }
 
@@ -102,6 +104,7 @@ public class Turret : Building
     {
         GetComponent<Animator>().SetTrigger("Shoot");
         GetComponent<AudioSource>().Play();
+        GetComponentInChildren<ShootLight>().Bang();
 
         switch (TurretSO.Projectile)
         {
