@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Experimental.GlobalIllumination;
 using static UnityEngine.GraphicsBuffer;
 
@@ -12,13 +13,18 @@ public class Turret : Building
     public Light Spotlight;
     public Light Gunlight;
 
+    float shutoffDuration = .5f;
+
     GameObject currentTarget;
 
     List<GameObject> targets;
 
+    bool canShoot = true;
+
     private void Start()
     {
-
+        EventDispatcher.Instance.OnCoreDestroyed += StopShooting;
+        EventDispatcher.Instance.OnCoreDestroyed += SpotlightOff;
 
         targets = new List<GameObject>();
         GetComponent<SphereCollider>().radius = TurretSO.Range;
@@ -27,10 +33,41 @@ public class Turret : Building
         InvokeRepeating("ShootAction", 0.0f, ((1.0f + Random.Range(-0.05f, 0.05f)) / TurretSO.FireRate));
     }
 
+    private void OnDestroy()
+    {
+        EventDispatcher.Instance.OnCoreDestroyed -= SpotlightOff;
+        EventDispatcher.Instance.OnCoreDestroyed -= StopShooting;
+
+    }
+
+    void SpotlightOff()
+    {
+        StartCoroutine(SpotlightOffCoroutine());
+    }
+
+    IEnumerator SpotlightOffCoroutine()
+    {
+        float time = 0;
+        float startValue = Spotlight.intensity;
+
+        while(time < shutoffDuration)
+        {
+            Spotlight.intensity = Mathf.Lerp(startValue, 0, time / shutoffDuration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        Spotlight.intensity = 0;
+    }
+
+    void StopShooting()
+    {
+        canShoot = false;
+    }
 
     void ShootAction()
     {
-        if (currentTarget != null)
+        if (currentTarget != null && canShoot)
         {
             ShootAtTarget();
         }
@@ -96,7 +133,7 @@ public class Turret : Building
     private void Update()
     {
 
-        if(currentTarget !=null)
+        if(currentTarget != null && canShoot)
             transform.LookAt(currentTarget.transform);
     }
 
