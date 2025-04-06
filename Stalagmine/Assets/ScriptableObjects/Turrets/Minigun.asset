@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d73cb8cef783c564f82eb80aeb7bf546, type: 3}
   m_Name: Minigun
   m_EditorClassIdentifier: 
-  Range: 3
+  Range: 4
   FireRate: 5
   Cost: 50
   Damage: 10
