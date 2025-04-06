@@ -282,6 +282,8 @@ public class MeshDestroy : MonoBehaviour
             meshDestroy.CutCascades = original.CutCascades;
             meshDestroy.ExplodeForce = original.ExplodeForce;
 
+            var timeBomb = GameObject.AddComponent<TimeBomb>();
+            timeBomb.StartCoroutine(timeBomb.TimeBombing());
         }
 
     }
