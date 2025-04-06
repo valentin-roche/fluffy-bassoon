@@ -20,10 +20,10 @@ namespace GameState
 
         private void Update()
         {
-            Vector3 mousePos = inputManager.GetSelectedMapPosition();
+            /*Vector3 mousePos = inputManager.GetSelectedMapPosition();
             Vector3Int gridPos = layers.ElementAt(0).WorldToCell(mousePos);
             mouseIndicator.transform.position = mousePos;
-            cellIndicator.transform.position = layers.ElementAt(0).CellToWorld(gridPos);
+            cellIndicator.transform.position = layers.ElementAt(0).CellToWorld(gridPos);*/
         }
     }
 

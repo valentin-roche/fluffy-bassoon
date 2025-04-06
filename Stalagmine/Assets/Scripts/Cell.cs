@@ -1,24 +1,49 @@
 using UnityEngine;
 
-namespace Grids {
-    enum Status
+namespace Grids
+{
+    public enum Status
     {
-        Empty,
-        Void,
-        Full
+        Empty, 
+        Void,   
+        Full    
     }
-    public class Cell {
-        private Status status; 
-        private GameObject content;
 
-        public Cell() { status = Status.Empty; }
-        public Cell(GameObject Content) { SetContent(Content); }
+    public class Cell: MonoBehaviour
+    {
+        public Status Status { get; private set; }
+        public GameObject Content { get; private set; }
+        public Vector2 Position { get; private set; }
 
-        public void SetContent(GameObject Content) {
-            if (content != null) {
-                status = Status.Full;
-                content = Content;
-            }
+        public Cell(Vector2 position, Status status = Status.Empty, GameObject content = null)
+        {
+            Position = position;
+            Status = status;
+            Content = content;
         }
+
+        public void SetContent(GameObject newContent)
+        {
+            Content = newContent;
+            Status = (newContent != null) ? Status.Full : Status.Empty;
+        }
+
+        public void MakeVoid()
+        {
+            if (Status == Status.Full)
+            {
+                Destroy(Content.gameObject);
+            }
+            Status = Status.Void;
+        }
+
+        public void Clear()
+        {
+            if (Content != null)
+                Object.Destroy(Content);
+            Status = Status.Empty;
+        }
+
+        
     }
 }
