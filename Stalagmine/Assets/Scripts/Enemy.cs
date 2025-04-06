@@ -62,5 +62,6 @@ public class Enemy : MonoBehaviour
         float step = Time.deltaTime * EnemySO.Speed;
 
         transform.position = Vector3.MoveTowards(transform.position, target.position, step);
+        transform.LookAt(target.position);
     }
 }

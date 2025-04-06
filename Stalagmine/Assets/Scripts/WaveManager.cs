@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,6 +33,11 @@ public class WaveManager : MonoBehaviour
             sm.SpawnEnemy(enemy);
         }
     }
+
+    //IEnumerator SpawnCoroutine(EnemySO enemy)
+    //{
+
+    //}
 
     public void StartWave()
     {

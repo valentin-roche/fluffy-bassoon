@@ -16,10 +16,12 @@ public class Turret : Building
 
     private void Start()
     {
+
+
         targets = new List<GameObject>();
         GetComponent<SphereCollider>().radius = TurretSO.Range;
-        GetComponentInChildren<Light>().spotAngle = TurretSO.Range*10;
-        GetComponentInChildren<Light>().innerSpotAngle = TurretSO.Range*5;
+        GetComponentInChildren<Light>().spotAngle = (TurretSO.Range*10);
+        GetComponentInChildren<Light>().innerSpotAngle = (TurretSO.Range*5);
         InvokeRepeating("ShootAction", 0.0f, ((1.0f + Random.Range(-0.05f, 0.05f)) / TurretSO.FireRate));
     }
 
