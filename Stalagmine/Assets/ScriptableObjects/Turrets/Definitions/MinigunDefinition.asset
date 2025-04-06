@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 701303487cdb1224ab9a79b42592917d, type: 3}
-  m_Name: TurretDefinition
+  m_Name: MinigunDefinition
   m_EditorClassIdentifier: 
-  turret: {fileID: 11400000, guid: 0dbc908a4134b5e4097fc45ca393ea75, type: 2}
-  turretIcon: {fileID: 21300000, guid: eb4e5b57001c94544a0a6d477f271db7, type: 3}
-  turretName: Turret
+  turret: {fileID: 11400000, guid: 04cb1821948738d4f8c6d359689b8caa, type: 2}
+  turretIcon: {fileID: 21300000, guid: bf3f6d023d8570d40a3a079783911d4f, type: 3}
+  turretName: Minigun
