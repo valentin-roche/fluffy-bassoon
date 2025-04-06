@@ -41,6 +41,6 @@ public class WaveManager : MonoBehaviour
 
     public void StartWave()
     {
-        SpawnWave(50);
+        SpawnWave(1);
     }
 }
