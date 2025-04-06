@@ -46,8 +46,8 @@ namespace GameState
         }
         public Vector3 SnapToGrid(Grid grid, Vector3 pos)
         {
-            Vector3Int cellPos = grid.WorldToCell(pos);
-            pos = grid.GetCellCenterWorld(cellPos);
+            //Vector3Int cellPos = grid.WorldToCell(pos);
+            pos = grid.GetCellCenterWorld(selectedCellPos);
             pos.y = 0; 
             return pos;
         }

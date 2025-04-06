@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEditor;
+using UnityEngine.LowLevelPhysics;
 
 namespace Grids
 {
@@ -54,6 +56,7 @@ namespace Grids
             float centeringOffset = -gridSize.x * grid.cellSize.x / 4;
             transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
             RefreshMesh();
+
         }
 
         public void ActualizeGrid()
@@ -115,9 +118,20 @@ namespace Grids
             newMesh.triangles = triangles;
 
 
-            mesh.RecalculateNormals();
+            newMesh.RecalculateNormals();
+            mesh = newMesh;
+            SerializedObject s = new SerializedObject(mesh);
+            s.FindProperty("m_IsReadable").boolValue = true;
+            GetComponent<MeshFilter>().mesh = mesh;
 
-            GetComponent<MeshFilter>().mesh = newMesh;
+
+            SyncMeshCollider();
+
+        }
+
+        public void SyncMeshCollider()
+        {
+            GetComponent<MeshCollider>().sharedMesh = mesh;
         }
 
         private List<int> IndexOf(int[] triangles, int i)
