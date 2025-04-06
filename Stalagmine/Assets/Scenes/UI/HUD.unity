@@ -2884,6 +2884,8 @@ MonoBehaviour:
   listContainer: {fileID: 1822556795}
   turretsDefinitions:
   - {fileID: 11400000, guid: 38dc21f5688173d42ac29452416e19e7, type: 2}
+  - {fileID: 11400000, guid: d3fcbb7135055ae4a87d4aee574cb66e, type: 2}
+  - {fileID: 11400000, guid: c61ea7f7431ca404eb39bedd4cd83a32, type: 2}
   turretSelectionPanel: {fileID: 394384505}
   pauseMenu: {fileID: 943906833}
   tutoPopupFirst: {fileID: 1254515338}
