@@ -3,12 +3,14 @@ using UnityEngine;
 
 namespace Grids
 {
+    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     public class GameGrid : MonoBehaviour
     {
         [SerializeField] 
-        public int gridSize = 24;
+        public Vector2 gridSize = new Vector2(7,7);
         public List<Cell> VoidCells;
         public List<Cell> UsedCells;
+        private Mesh mesh;
 
         public static List<Vector2> Directions = new List<Vector2>
         {
@@ -22,15 +24,29 @@ namespace Grids
 
         void Start()
         {
-            InitializeGrid();
-        }
-
-        private void InitializeGrid()
-        {
             VoidCells = new List<Cell>();
-            UsedCells = new List<Cell>();           
+            UsedCells = new List<Cell>();
+            mesh = new Mesh();
 
-            ActualizeGrid(); 
+            Vector3[] vertices = new Vector3[3];
+            Vector2[] uv = new Vector2[3];
+            int[] triangles = new int[3];
+
+            vertices[0] = new Vector3(0, 0);
+            vertices[1] = new Vector3(0, 0, 100);
+            vertices[2] = new Vector3(100, 0, 100);
+
+            triangles[0] = 0;
+            triangles[1] = 1;
+            triangles[2] = 2;
+
+
+            mesh.vertices = vertices;
+            mesh.uv = uv;
+            mesh.triangles = triangles;
+
+            GetComponent<MeshFilter>().mesh = mesh;
+
         }
 
         public GameGrid(List<Cell> VoidCells, List<Cell> UsedCells)
@@ -82,6 +98,11 @@ namespace Grids
         {
             getCellAt(pos).SetContent(go);
         }
+
+        //private Mesh GetCellMeshAt(Vector2 pos)
+        //{
+        //    return getCellAt(pos).getMesh();
+        //}
 
         public List<Cell> getVoidCells()
         {

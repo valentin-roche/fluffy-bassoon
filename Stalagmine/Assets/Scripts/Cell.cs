@@ -9,6 +9,11 @@ namespace Grids
         Full    
     }
 
+    public enum StatusMesh
+    {
+
+    }
+
     public class Cell: MonoBehaviour
     {
         public Status Status { get; private set; }
@@ -48,6 +53,9 @@ namespace Grids
             Status = Status.Empty;
         }
 
-        
+        //internal Mesh getMesh()
+        //{
+            
+        //}
     }
 }
