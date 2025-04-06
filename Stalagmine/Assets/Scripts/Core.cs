@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Core : Building
@@ -6,6 +7,10 @@ public class Core : Building
     HealthManager HealthManager { get; set; }
 
     public event Action CoreDestroyed;
+    bool isDestroyed = false;
+
+    [SerializeField] AudioSource CoreDeathAudio;
+    [SerializeField] AudioSource CoreHitAudio;
 
     private void Start()
     {
@@ -15,6 +20,7 @@ public class Core : Building
     public void Hit(int damage)
     {
         HealthManager.LoseHealth(damage);
+        CoreHitAudio.Play();
 
         if (HealthManager.IsDead())
         {
@@ -26,8 +32,9 @@ public class Core : Building
     {
         if (collider.gameObject.CompareTag("Enemy"))
         {
-            Hit(collider.gameObject.GetComponent<Enemy>().GetSO().Damage);
-            collider.gameObject.GetComponent<Enemy>().DestroyEnemy();
+            //Hit(collider.gameObject.GetComponent<Enemy>().GetSO().Damage);
+            //collider.gameObject.GetComponent<Enemy>().KillEnemy();
+            collider.gameObject.GetComponent<Enemy>().Attack();
         }
     }
 
@@ -35,8 +42,30 @@ public class Core : Building
     {
         //CoreDestroyed.Invoke();
         EventDispatcher.Instance.CoreDestroyed();
-        GetComponent<AudioSource>().Play();
-        Destroy(gameObject, GetComponent<AudioSource>().clip.length+1);
+
+        if (!isDestroyed)
+        {
+            isDestroyed = true;
+            CoreDeathAudio.Play();
+            StartCoroutine(LightOff());
+        }
+
+        //Destroy(gameObject, GetComponent<AudioSource>().clip.length+1);
+    }
+
+    IEnumerator LightOff()
+    {
+        float time = 0;
+        float startIntensity = GetComponentInChildren<Light>().intensity;
+
+        while(time < 1)
+        {
+            GetComponentInChildren<Light>().intensity = Mathf.Lerp(startIntensity, 0, time / 1);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        GetComponentInChildren<Light>().intensity = 0;
     }
 
     private void OnDestroy()

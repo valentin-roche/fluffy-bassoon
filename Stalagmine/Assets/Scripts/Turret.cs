@@ -84,6 +84,7 @@ public class Turret : Building
             targets.Add(collider.gameObject);
 
             collider.gameObject.GetComponent<Enemy>().OnEnemyDeath += RemoveTarget;
+            collider.gameObject.GetComponent<Enemy>().OnEnemyAttack += RemoveTarget;
 
             if (currentTarget == null)
                 SetNewTarget();
