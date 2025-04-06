@@ -140,6 +140,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1311869408366857700, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: baseValue
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 1618212748389489950, guid: 867417bd6c697e14490eaf1785332880, type: 3}
       propertyPath: spawnPoints.Array.data[0].size.x
       value: 5
@@ -298,6 +302,17 @@ PrefabInstance:
       addedObject: {fileID: 1359058753}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+--- !u!114 &266244702 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1311869408366857700, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+  m_PrefabInstance: {fileID: 266244701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3534c3a12e956d3478aaee8976090c08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &299679091 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000013053745136, guid: d9231829d3cedca409477c9327eb6425, type: 3}
@@ -953,6 +968,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 452734074056554898, guid: f12c4daf682c482468c11a0fe30ecd27, type: 3}
+      propertyPath: pouchManager
+      value: 
+      objectReference: {fileID: 266244702}
     - target: {fileID: 1684684122724749032, guid: f12c4daf682c482468c11a0fe30ecd27, type: 3}
       propertyPath: m_Name
       value: UILoader

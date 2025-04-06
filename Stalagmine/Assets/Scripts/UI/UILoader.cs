@@ -9,6 +9,10 @@ public class UILoader : MonoBehaviour
     [SerializeField]
     private bool loadSceneOnStart = true;
 
+    [Header("Components")]
+    [SerializeField]
+    private PouchManager pouchManager;
+
     private ICommunicateWithGameplay currentMenu;
 
     void Start()
@@ -40,7 +44,7 @@ public class UILoader : MonoBehaviour
 
             if(currentMenu != null)
             {
-                currentMenu.GiveContex();
+                currentMenu.GiveContex(pouchManager);
             }
         }
     }

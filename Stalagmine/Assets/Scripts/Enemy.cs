@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     {
         this.EnemySO = enemySO;
         HealthManager = new(EnemySO.Health);
-        this.target = target;
+        this.target = target;        
     }
 
     public EnemySO GetSO()
@@ -44,6 +44,7 @@ public class Enemy : MonoBehaviour
         GetComponent<AudioSource>().Play();
 
         OnEnemyDeath?.Invoke(this.gameObject);
+        EventDispatcher.Instance.EnemyDied(this);
 
         Destroy(gameObject, GetComponent<AudioSource>().clip.length); // On verra après
     }
