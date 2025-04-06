@@ -1,10 +1,13 @@
 using DG.Tweening;
+using GameState;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UI;
+using UnityEditor.TerrainTools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
 {
@@ -17,6 +20,8 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     private List<TurretDefinition> turretsDefinitions;
     [SerializeField]
     private RectTransform turretSelectionPanel;
+    [SerializeField]
+    private Scrollbar scrollbar;
 
     [Header("Pause Menu")]
     [SerializeField]
@@ -32,11 +37,16 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     [SerializeField]
     private TextMeshProUGUI pouchContent;
 
+    [Header("Game Over Menu")]
+    [SerializeField]
+    private CanvasGroup gameOverCanvas;
+
     private List<GameObject> turretsObjects;
 
     private bool isSelectionShowned = false;
 
     private PouchManager pouchManager;
+    private TerrainManager terrainManager;
 
     void Start()
     {
@@ -44,10 +54,17 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         PopulateTurretList();
 
         ShowTutoPanel(tutoPopupFirst);
+
+        EventDispatcher.Instance.OnCoreDestroyed += OnGameOver;
     }
 
     private void OnDestroy()
     {
+        if(EventDispatcher.Instance)
+        {
+            EventDispatcher.Instance.OnCoreDestroyed -= OnGameOver;
+        }
+        
         if (turretsObjects != null && turretsObjects.Count > 0) 
         {
             foreach (GameObject obj in turretsObjects)
@@ -67,9 +84,16 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && isSelectionShowned == false && pauseMenu.activeInHierarchy == false && tutoPopupSecond.gameObject.activeInHierarchy == false)
+        if (Input.GetMouseButtonDown(0) && pauseMenu.activeInHierarchy == false && tutoPopupSecond.gameObject.activeInHierarchy == false && gameOverCanvas.gameObject.activeInHierarchy == false)
         {
-            ToggleShowSelectionPanel(true);
+            Vector2 mousePos = Input.mousePosition;
+            if (isSelectionShowned == false || (isSelectionShowned && turretSelectionPanel.rect.Contains(mousePos) == false))
+            {
+                if(terrainManager.OnClickLeftMouseToBuild())
+                {
+                    ToggleShowSelectionPanel(true);
+                }                
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -90,12 +114,14 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         }
     }
 
-    public void GiveContex(PouchManager pouch)
+    public void GiveContex(PouchManager pouch, TerrainManager terrain)
     {
         pouchManager = pouch;
         pouchContent.text = pouchManager.PouchValue.ToString();
         pouchManager.PouchValueChanged += OnPushValueChanged;
         UpdateTurretList();
+
+        terrainManager = terrain;
     }
 
     private void PopulateTurretList()
@@ -112,6 +138,8 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
                 display.TurretSelected += OnTurretSelected;
             }
         }
+
+        scrollbar.value = 0;
     }
 
     private void OnTurretSelected(TurretSO turret)
@@ -120,7 +148,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         {
             if(pouchManager.Depense(turret.Cost))
             {
-                //place turret
+                terrainManager.BuildTurret(turret);
                 ToggleShowSelectionPanel(false);
             }
         }
@@ -198,5 +226,11 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
                 }
             }
         }
+    }
+
+    private void OnGameOver()
+    {
+        gameOverCanvas.gameObject.SetActive(true);
+        gameOverCanvas.DOFade(1f, 1f);
     }
 }

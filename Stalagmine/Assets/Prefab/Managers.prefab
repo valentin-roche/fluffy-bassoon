@@ -1107,6 +1107,7 @@ GameObject:
   - component: {fileID: 8994050734358139473}
   - component: {fileID: 1311869408366857700}
   - component: {fileID: 879407158246413293}
+  - component: {fileID: 8449127561900422137}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1230,6 +1231,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8747b01d410933b4790ea1ebb01b8e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8449127561900422137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7295537123798596297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6deaca5290d08784081dc775af0d2b4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputManager: {fileID: 8495490397426561907}
+  gridTransition: {fileID: 6745290913486845747}
+  turretManager: {fileID: 1232718437978734201}
+  turretSOs: []
 --- !u!1 &7698834794961899681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1831,3 +1848,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8861243857495939914, guid: ea2fe2313f7fd624c8866b95549fb22c, type: 3}
   m_PrefabInstance: {fileID: 6264911740651414370}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6745290913486845747 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 823426800791983185, guid: ea2fe2313f7fd624c8866b95549fb22c, type: 3}
+  m_PrefabInstance: {fileID: 6264911740651414370}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72392cdd5a3744f43bc8becf6f3b4355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

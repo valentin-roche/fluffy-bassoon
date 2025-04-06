@@ -55,6 +55,7 @@ namespace UI
         {
             button.interactable = !disable;
             canvas.alpha = disable ? 0.5f : 1f;
+            canvas.blocksRaycasts = !disable;
             redFilter.SetActive(disable);
         }
     }
