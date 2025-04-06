@@ -50,6 +50,9 @@ namespace Grids
 
         public void Update()
         {
+            // Set to center
+            float centeringOffset = -gridSize.x * grid.cellSize.x / 4;
+            transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
             RefreshMesh();
         }
 

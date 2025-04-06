@@ -59,10 +59,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameGrid
       objectReference: {fileID: 0}
-    - target: {fileID: 5222287977125647891, guid: 2ec386978581a2d488091b8890642d4b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6414072073682106045, guid: 2ec386978581a2d488091b8890642d4b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -103,30 +99,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6427109746660136440, guid: 2ec386978581a2d488091b8890642d4b, type: 3}
-      propertyPath: gridSize.x
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6427109746660136440, guid: 2ec386978581a2d488091b8890642d4b, type: 3}
-      propertyPath: gridSize.y
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 7279191907725477562, guid: 2ec386978581a2d488091b8890642d4b, type: 3}
-      propertyPath: m_CellGap.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7279191907725477562, guid: 2ec386978581a2d488091b8890642d4b, type: 3}
-      propertyPath: m_CellSize.x
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7279191907725477562, guid: 2ec386978581a2d488091b8890642d4b, type: 3}
-      propertyPath: m_CellSize.z
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7371829925004104801, guid: 2ec386978581a2d488091b8890642d4b, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
