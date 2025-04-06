@@ -4,8 +4,8 @@ namespace Grids
 {
     public class GridTransition : MonoBehaviour
     {
-        private GameGrid upperGrid;
-        private GameGrid lowerGrid;
+        public GameGrid upperGrid { get; private set; }
+        public  GameGrid lowerGrid { get; private set; }
         private Vector3 lowerGridOffset = new Vector3(0, 40 , 0);
         [SerializeField]
         public GameGrid GameGridPrefab;

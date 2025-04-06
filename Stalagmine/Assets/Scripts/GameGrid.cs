@@ -133,10 +133,31 @@ namespace Grids
             return new Cell(pos); 
         }
 
+        public bool isCellEmpty(Vector2 pos)
+        {
+            foreach (Cell voidCell in VoidCells)
+            {
+                if (voidCell.Position == pos)
+                {
+                    return false;
+                }
+            }
+            foreach (Cell usedCell in UsedCells)
+            {
+                if (usedCell.Position == pos)
+                {
+                    return false;
+                }
+            }
+            return true; 
+        }
+
         public void MakeVoidAt(Vector2 pos)
         {
             getCellAt(pos).MakeVoid();
         }
+
+
 
         public void SetContentAt(Vector2 pos, GameObject go)
         {
