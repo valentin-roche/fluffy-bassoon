@@ -8,6 +8,8 @@ public class TurretSO : ScriptableObject
     public int Cost;
     public int Damage;
     public ProjectileType Projectile;
+
+    public GameObject Prefab;
     
     public enum ProjectileType
     {
