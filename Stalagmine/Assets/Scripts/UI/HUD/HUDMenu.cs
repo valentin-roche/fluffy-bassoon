@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -97,7 +98,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     {
         turretsObjects = new List<GameObject>();
 
-        foreach (TurretDefinition def in turretsDefinitions) 
+        foreach (TurretDefinition def in turretsDefinitions.OrderBy(x => x.Turret.Cost)) 
         {
             GameObject newDisplay = Instantiate(turretDisplayPrefab, listContainer);
             turretsObjects.Add(newDisplay);
@@ -116,6 +117,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
             if(pouchManager.Depense(turret.Cost))
             {
                 //place turret
+                ToggleShowSelectionPanel(false);
             }
         }
     }
