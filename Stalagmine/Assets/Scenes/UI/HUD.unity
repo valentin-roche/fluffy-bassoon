@@ -2888,6 +2888,7 @@ MonoBehaviour:
   pauseMenu: {fileID: 943906833}
   tutoPopupFirst: {fileID: 1254515338}
   tutoPopupSecond: {fileID: 180378084}
+  pouchContent: {fileID: 1800269879}
 --- !u!4 &1878296580
 Transform:
   m_ObjectHideFlags: 0

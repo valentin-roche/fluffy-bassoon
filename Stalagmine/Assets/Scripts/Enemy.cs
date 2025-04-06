@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     {
         this.EnemySO = enemySO;
         HealthManager = new(EnemySO.Health);
-        this.target = target;
+        this.target = target;        
     }
 
     public EnemySO GetSO()
@@ -44,6 +44,7 @@ public class Enemy : MonoBehaviour
         GetComponent<AudioSource>().Play();
 
         OnEnemyDeath?.Invoke(this.gameObject);
+        EventDispatcher.Instance.EnemyDied(this);
 
         Destroy(gameObject, GetComponent<AudioSource>().clip.length); // On verra après
     }
@@ -62,5 +63,6 @@ public class Enemy : MonoBehaviour
         float step = Time.deltaTime * EnemySO.Speed;
 
         transform.position = Vector3.MoveTowards(transform.position, target.position, step);
+        transform.LookAt(target.position);
     }
 }

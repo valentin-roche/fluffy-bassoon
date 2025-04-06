@@ -2,5 +2,5 @@ using System;
 
 public interface ICommunicateWithGameplay
 {
-    public void GiveContex();
+    public void GiveContex(PouchManager pouch);
 }

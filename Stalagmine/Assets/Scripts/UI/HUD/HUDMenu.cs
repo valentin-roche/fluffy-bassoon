@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System.Collections.Generic;
+using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -26,9 +27,15 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     [SerializeField]
     private RectTransform tutoPopupSecond;
 
+    [Header("Pause Menu")]
+    [SerializeField]
+    private TextMeshProUGUI pouchContent;
+
     private List<GameObject> turretsObjects;
 
     private bool isSelectionShowned = false;
+
+    private PouchManager pouchManager;
 
     void Start()
     {
@@ -49,6 +56,11 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
                     display.TurretSelected -= OnTurretSelected;
                 }
             }
+        }
+
+        if(pouchManager != null)
+        {
+            pouchManager.PouchValueChanged -= OnPushValueChanged;
         }
     }
 
@@ -73,9 +85,12 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         }
     }
 
-    public void GiveContex()
+    public void GiveContex(PouchManager pouch)
     {
-
+        pouchManager = pouch;
+        pouchContent.text = pouchManager.PouchValue.ToString();
+        pouchManager.PouchValueChanged += OnPushValueChanged;
+        UpdateTurretList();
     }
 
     private void PopulateTurretList()
@@ -96,7 +111,13 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
 
     private void OnTurretSelected(TurretSO turret)
     {
-
+        if (pouchManager != null) 
+        {
+            if(pouchManager.Depense(turret.Cost))
+            {
+                //place turret
+            }
+        }
     }
 
     private void ToggleShowSelectionPanel(bool show)
@@ -146,5 +167,26 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         }
 
         sequence.Play();
+    }
+
+    private void OnPushValueChanged(int value)
+    {
+        pouchContent.text = value.ToString();
+
+        UpdateTurretList();
+    }
+
+    private void UpdateTurretList()
+    {
+        if (turretsObjects != null && turretsObjects.Count > 0)
+        {
+            foreach (GameObject obj in turretsObjects)
+            {
+                if (obj != null && obj.GetComponent<TurretDisplay>() is TurretDisplay display)
+                {
+                    display.Disable(display.TurretDefinition.Turret.Cost > pouchManager.PouchValue);
+                }
+            }
+        }
     }
 }
