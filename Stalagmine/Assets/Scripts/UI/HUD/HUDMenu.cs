@@ -54,10 +54,17 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         PopulateTurretList();
 
         ShowTutoPanel(tutoPopupFirst);
+
+        EventDispatcher.Instance.OnCoreDestroyed += OnGameOver;
     }
 
     private void OnDestroy()
     {
+        if(EventDispatcher.Instance)
+        {
+            EventDispatcher.Instance.OnCoreDestroyed -= OnGameOver;
+        }
+        
         if (turretsObjects != null && turretsObjects.Count > 0) 
         {
             foreach (GameObject obj in turretsObjects)
@@ -77,7 +84,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && pauseMenu.activeInHierarchy == false && tutoPopupSecond.gameObject.activeInHierarchy == false)
+        if (Input.GetMouseButtonDown(0) && pauseMenu.activeInHierarchy == false && tutoPopupSecond.gameObject.activeInHierarchy == false && gameOverCanvas.gameObject.activeInHierarchy == false)
         {
             Vector2 mousePos = Input.mousePosition;
             if (isSelectionShowned == false || (isSelectionShowned && turretSelectionPanel.rect.Contains(mousePos) == false))
