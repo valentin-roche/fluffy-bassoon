@@ -13,15 +13,17 @@ public class CameraMovement : MonoBehaviour
     public Transform[] CameraPositions;
     int positionIndex = 0;
 
-    public Light Spotlight;
+    public Light GlobalSpotlight;
+    public Light CameraSpotlight;
+    public Camera Camera;
 
-    Camera camera;
+    Transform cameraTransform;
 
     Quaternion targetvalue;
     private void Start()
     {
         targetvalue = transform.rotation;
-        camera = GetComponentInChildren<Camera>();
+        cameraTransform = GetComponentInChildren<Camera>().transform.parent;
     }
 
     private void Update()
@@ -31,11 +33,13 @@ public class CameraMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.A))
             {
                 targetvalue = Quaternion.Euler(targetvalue.eulerAngles + new Vector3(0, 90, 0));
+                //Camera.gameObject.GetComponent<CameraShake>().shakeDuration = duration;
                 StartCoroutine(PivotCamera());
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
                 targetvalue = Quaternion.Euler(targetvalue.eulerAngles + new Vector3(0, -90, 0));
+                //Camera.gameObject.GetComponent<CameraShake>().shakeDuration = duration;
                 StartCoroutine(PivotCamera());
             }
         }
@@ -44,32 +48,33 @@ public class CameraMovement : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.W))
             {
-                positionIndex++;
-                if(positionIndex >= CameraPositions.Length)
+                if(positionIndex+1 >= CameraPositions.Length)
                 {
-                    positionIndex--;
                     return;
                 }
+                positionIndex++;
+                Camera.gameObject.GetComponent<CameraShake>().shakeDuration = duration;
 
-                if(positionIndex > 1)
+                if (positionIndex > 1)
                 {
-                    camera.GetComponentInChildren<Light>().enabled = true;
-                    Spotlight.enabled = false;
+                    CameraSpotlight.enabled = true;
+                    GlobalSpotlight.enabled = false;
                 }
                 StartCoroutine(MoveCamera(CameraPositions[positionIndex]));
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
-                positionIndex--;
-                if (positionIndex < 0)
+                if (positionIndex-1 < 0)
                 {
-                    positionIndex++;
                     return;
                 }
+                positionIndex--;
+                Camera.gameObject.GetComponent<CameraShake>().shakeDuration = duration;
+
                 if (positionIndex < 2)
                 {
-                    camera.GetComponentInChildren<Light>().enabled = false;
-                    Spotlight.enabled = true;
+                    CameraSpotlight.enabled = false;
+                    GlobalSpotlight.enabled = true;
                 }
                 StartCoroutine(MoveCamera(CameraPositions[positionIndex]));
             }
@@ -97,20 +102,20 @@ public class CameraMovement : MonoBehaviour
     {
         isMoving = true;
         float time = 0;
-        Quaternion rotStartValue = camera.transform.rotation;
-        Vector3 posStartValue = camera.transform.position;
+        Quaternion rotStartValue = cameraTransform.rotation;
+        Vector3 posStartValue = cameraTransform.position;
 
 
         while (time < duration)
         {
-            camera.transform.rotation = Quaternion.Lerp(rotStartValue, transform.rotation, curve.Evaluate(time / duration));
-            camera.transform.position = Vector3.Lerp(posStartValue, transform.position, curve.Evaluate(time / duration));
+            cameraTransform.rotation = Quaternion.Lerp(rotStartValue, transform.rotation, curve.Evaluate(time / duration));
+            cameraTransform.position = Vector3.Lerp(posStartValue, transform.position, curve.Evaluate(time / duration));
             time += Time.deltaTime;
             yield return null;
         }
 
-        camera.transform.position = transform.position;
-        camera.transform.rotation = transform.rotation;
+        cameraTransform.position = transform.position;
+        cameraTransform.rotation = transform.rotation;
         isMoving = false;
     }
 }
