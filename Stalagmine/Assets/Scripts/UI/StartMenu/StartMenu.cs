@@ -17,13 +17,15 @@ namespace UI.Menus
 
         private void Start()
         {
+            fadeOutCanvas.DOFade(0, 0.5f);
             Display(true);
         }
 
         public void OnStart()
         {
             Tween fadeOutTween = fadeOutCanvas.DOFade(1, 0.5f);
-            fadeOutTween.OnComplete(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1));            
+            fadeOutTween.OnComplete(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1));
+            fadeOutTween.Play();
         }
 
         public void OpenSettings()
