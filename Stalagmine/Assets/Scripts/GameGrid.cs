@@ -31,6 +31,9 @@ namespace Grids
 
         void Start()
         {
+            // Set to center
+            float centeringOffset = -gridSize.x * grid.cellSize.x / 4;
+            transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
             VoidCells = new List<Cell>();
             UsedCells = new List<Cell>();
             mesh = new Mesh();
@@ -43,6 +46,11 @@ namespace Grids
         {
             this.VoidCells = VoidCells;
             this.UsedCells = UsedCells;
+        }
+
+        public void Update()
+        {
+            RefreshMesh();
         }
 
         public void ActualizeGrid()
@@ -72,8 +80,7 @@ namespace Grids
             {
                 for (int x = 0; x <= gridSize.x; x++, i++)
                 {
-                    Vector3 cellCoordInGrid = GetCellCenterCoordInGrid(y, x);
-                    vertices[i] = new Vector3(x , 0, y) + cellCoordInGrid;
+                    vertices[i] = GetCellCenterCoordFromGridPos(y, x);
                     uv[i] = new Vector2(x / gridSize.x, y / gridSize.y);
                 }
             }
@@ -124,10 +131,10 @@ namespace Grids
             return result;
         }
 
-        private Vector3 GetCellCenterCoordInGrid(int y, int x)
+        private Vector3 GetCellCenterCoordFromGridPos(int y, int x)
         {
-            Vector3Int cellPosition = new Vector3Int(x, 0, y);
-            Vector3 coord = grid.GetCellCenterWorld(cellPosition);
+            Vector3Int gridPosition = new Vector3Int(x, 0, y);
+            Vector3 coord = grid.CellToWorld(gridPosition);
             return coord;
         }
 
@@ -194,10 +201,6 @@ namespace Grids
             getCellAt(pos).SetContent(go);
         }
 
-        //private Mesh GetCellMeshAt(Vector2 pos)
-        //{
-        //    return getCellAt(pos).getMesh();
-        //}
 
         public List<Cell> getVoidCells()
         {

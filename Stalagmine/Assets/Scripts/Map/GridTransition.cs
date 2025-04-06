@@ -14,7 +14,7 @@ namespace Grids
 
         private void Start()
         {
-            upperGrid = Instantiate<GameGrid>(GameGridPrefab, Vector3.zero, Quaternion.identity, this.transform);
+            upperGrid = Instantiate<GameGrid>(GameGridPrefab, GameGridPrefab.transform.position, Quaternion.identity, this.transform);
             upperGrid.gameObject.SetActive(true);
             for (int i = 0; i < InitialVoidNum; i++)
             {

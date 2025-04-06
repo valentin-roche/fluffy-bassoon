@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da08a63912741747a65d3ef8c04eb40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: {x: 0, y: 0}
+  gridSize: {x: 9, y: 9}
   grid: {fileID: 7279191907725477562}
   VoidCells: []
   UsedCells: []
@@ -59,7 +59,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5222287977125647891}
   m_Enabled: 1
-  m_CellSize: {x: 10, y: 1, z: 10}
+  m_CellSize: {x: 7, y: 0, z: 7}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0

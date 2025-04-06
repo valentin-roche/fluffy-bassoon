@@ -132,6 +132,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1264013230223591981, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1264013230223591981, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1618212748389489950, guid: 867417bd6c697e14490eaf1785332880, type: 3}
       propertyPath: SpawnParent
       value: 
@@ -171,6 +179,30 @@ PrefabInstance:
     - target: {fileID: 1618212748389489950, guid: 867417bd6c697e14490eaf1785332880, type: 3}
       propertyPath: spawnPoints.Array.data[3].size.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3172792946476709928, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3172792946476709928, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3172792946476709928, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282301408152140330, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: m_CellSize.x
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282301408152140330, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: m_CellSize.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282301408152140330, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: m_CellSize.z
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3303602911238767881, guid: 867417bd6c697e14490eaf1785332880, type: 3}
       propertyPath: m_LocalPosition.x
@@ -311,6 +343,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TurretSO: {fileID: 11400000, guid: 0dbc908a4134b5e4097fc45ca393ea75, type: 2}
+  Spotlight: {fileID: 0}
+  Gunlight: {fileID: 0}
 --- !u!135 &625578178
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -662,6 +696,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TurretSO: {fileID: 11400000, guid: 0dbc908a4134b5e4097fc45ca393ea75, type: 2}
+  Spotlight: {fileID: 0}
+  Gunlight: {fileID: 0}
 --- !u!135 &1118384441
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1220,6 +1256,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  duration: 0
+  CameraPositions: []
+  Spotlight: {fileID: 0}
 --- !u!1 &1372938723
 GameObject:
   m_ObjectHideFlags: 0
@@ -1404,6 +1443,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TurretSO: {fileID: 11400000, guid: 0dbc908a4134b5e4097fc45ca393ea75, type: 2}
+  Spotlight: {fileID: 0}
+  Gunlight: {fileID: 0}
 --- !u!135 &1656624998
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1737,6 +1778,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 452734074056554898, guid: f12c4daf682c482468c11a0fe30ecd27, type: 3}
+      propertyPath: pouchManager
+      value: 
+      objectReference: {fileID: 1910691132}
     - target: {fileID: 1684684122724749032, guid: f12c4daf682c482468c11a0fe30ecd27, type: 3}
       propertyPath: m_Name
       value: UILoader
@@ -1842,6 +1887,17 @@ MonoBehaviour:
   IsDead: 0
   IsWin: 0
   LayerParent: {fileID: 0}
+--- !u!114 &1910691132 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1311869408366857700, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+  m_PrefabInstance: {fileID: 266244701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408531902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3534c3a12e956d3478aaee8976090c08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -10,13 +10,6 @@ namespace Grids
         Full    
     }
 
-    //public Dictionary<Status, Mesh> StatusMesh = new Dictionary<Status, Mesh>
-    //{
-    //    { Status.Empty, Refs.EmptyMesh },
-    //    { Status.Void, Refs.VoidMesh },
-    //    { Status.Full, Refs.EmptyMesh }
-    //};
-
     public class Cell: MonoBehaviour
     {
         public Status Status { get; private set; }
@@ -55,10 +48,5 @@ namespace Grids
                 Object.Destroy(Content);
             Status = Status.Empty;
         }
-
-        //internal Mesh getMesh()
-        //{
-
-        //}
     }
 }
