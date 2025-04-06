@@ -34,7 +34,7 @@ public class Core : Building
     void DestroyCore()
     {
         //CoreDestroyed.Invoke();
-
+        EventDispatcher.Instance.CoreDestroyed();
         GetComponent<AudioSource>().Play();
         Destroy(gameObject, GetComponent<AudioSource>().clip.length+1);
     }

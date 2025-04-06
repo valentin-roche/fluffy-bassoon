@@ -14,11 +14,27 @@ public class Enemy : MonoBehaviour
 
     private Transform target;
 
+    bool gameOver = false;
+
     public void OnSpawn(EnemySO enemySO, Transform target)
     {
         this.EnemySO = enemySO;
         HealthManager = new(EnemySO.Health);
-        this.target = target;        
+        this.target = target;
+
+        EventDispatcher.Instance.OnCoreDestroyed += IDLE;
+    }
+
+    private void OnDestroy()
+    {
+        EventDispatcher.Instance.OnCoreDestroyed -= IDLE;
+
+    }
+
+    void IDLE()
+    {
+        gameOver = true;
+        GetComponent<Animator>().SetTrigger("GameLost");
     }
 
     public EnemySO GetSO()
@@ -29,6 +45,7 @@ public class Enemy : MonoBehaviour
     public void DamageEnemy(int damage)
     {
         GetComponent<AudioSource>().Play();
+        GetComponent<ParticleSystem>().Play();
         HealthManager.LoseHealth(damage);
 
         if (HealthManager.IsDead())
@@ -58,7 +75,7 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (target == null) return;
+        if (target == null || gameOver) return;
 
         float step = Time.deltaTime * EnemySO.Speed;
 

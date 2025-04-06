@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class GameLoopManager : MonoBehaviour
@@ -7,6 +8,7 @@ public class GameLoopManager : MonoBehaviour
     public bool IsWin = false;
 
     public GameObject LayerParent;
+    public GameObject Turrets;
 
     private void Start()
     {
@@ -27,15 +29,33 @@ public class GameLoopManager : MonoBehaviour
     {
         if (IsPlaying)
         {
-            if(GetComponent<SpawnManager>().SpawnParent.childCount == 0) IsWin = true;
+            if (GetComponent<SpawnManager>().SpawnParent.childCount == 0)
+            {
+                IsPlaying = false;
+                IsWin = true;
+            }
         }
         if(IsWin)
         {
-            LayerParent.transform.GetChild(0).gameObject.SetActive(false);
+            IsWin = false;
+            StartCoroutine(DestroyLayer());
         }
         if (IsDead)
         {
 
         }
+    }
+
+    public IEnumerator DestroyLayer()
+    {
+        LayerParent.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+
+        for (var i = 1; i < LayerParent.transform.GetChild(0).transform.childCount; i++)
+        {
+            var enf = LayerParent.transform.GetChild(0).transform.GetChild(i);
+            if (enf != null)
+                enf.GetComponent<MeshDestroy>().DestroyMesh();
+        }
+        yield return null;
     }
 }
