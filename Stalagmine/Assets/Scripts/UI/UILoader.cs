@@ -19,14 +19,6 @@ public class UILoader : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        if(currentMenu != null)
-        {
-            currentMenu.SendDataSelection += OnDataSelection;
-        }
-    }
-
     public async void LoadScene()
     {
         await SceneManager.LoadSceneAsync(sceneNameToLoad, LoadSceneMode.Additive);
@@ -49,13 +41,7 @@ public class UILoader : MonoBehaviour
             if(currentMenu != null)
             {
                 currentMenu.GiveContex();
-                currentMenu.SendDataSelection += OnDataSelection;
             }
         }
-    }
-
-    private void OnDataSelection()
-    {
-
     }
 }
