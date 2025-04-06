@@ -5,6 +5,7 @@ using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
 {
@@ -17,6 +18,8 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     private List<TurretDefinition> turretsDefinitions;
     [SerializeField]
     private RectTransform turretSelectionPanel;
+    [SerializeField]
+    private Scrollbar scrollbar;
 
     [Header("Pause Menu")]
     [SerializeField]
@@ -31,6 +34,10 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     [Header("Pause Menu")]
     [SerializeField]
     private TextMeshProUGUI pouchContent;
+
+    [Header("Game Over Menu")]
+    [SerializeField]
+    private CanvasGroup gameOverCanvas;
 
     private List<GameObject> turretsObjects;
 
@@ -67,9 +74,14 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && isSelectionShowned == false && pauseMenu.activeInHierarchy == false && tutoPopupSecond.gameObject.activeInHierarchy == false)
+        if (Input.GetMouseButtonDown(0) && pauseMenu.activeInHierarchy == false && tutoPopupSecond.gameObject.activeInHierarchy == false)
         {
-            ToggleShowSelectionPanel(true);
+            Vector2 mousePos = Input.mousePosition;
+            if (isSelectionShowned == false || (isSelectionShowned && turretSelectionPanel.rect.Contains(mousePos) == false))
+            {
+                //send click question
+                ToggleShowSelectionPanel(true);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -112,6 +124,8 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
                 display.TurretSelected += OnTurretSelected;
             }
         }
+
+        scrollbar.value = 0;
     }
 
     private void OnTurretSelected(TurretSO turret)
@@ -198,5 +212,11 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
                 }
             }
         }
+    }
+
+    private void OnGameOver()
+    {
+        gameOverCanvas.gameObject.SetActive(true);
+        gameOverCanvas.DOFade(1f, 1f);
     }
 }
