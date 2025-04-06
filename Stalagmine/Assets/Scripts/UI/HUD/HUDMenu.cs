@@ -1,8 +1,10 @@
 using DG.Tweening;
+using GameState;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UI;
+using UnityEditor.TerrainTools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -44,6 +46,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     private bool isSelectionShowned = false;
 
     private PouchManager pouchManager;
+    private TerrainManager terrainManager;
 
     void Start()
     {
@@ -79,8 +82,10 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
             Vector2 mousePos = Input.mousePosition;
             if (isSelectionShowned == false || (isSelectionShowned && turretSelectionPanel.rect.Contains(mousePos) == false))
             {
-                //send click question
-                ToggleShowSelectionPanel(true);
+                if(terrainManager.OnClickLeftMouseToBuild())
+                {
+                    ToggleShowSelectionPanel(true);
+                }                
             }
         }
 
@@ -102,12 +107,14 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         }
     }
 
-    public void GiveContex(PouchManager pouch)
+    public void GiveContex(PouchManager pouch, TerrainManager terrain)
     {
         pouchManager = pouch;
         pouchContent.text = pouchManager.PouchValue.ToString();
         pouchManager.PouchValueChanged += OnPushValueChanged;
         UpdateTurretList();
+
+        terrainManager = terrain;
     }
 
     private void PopulateTurretList()
@@ -134,7 +141,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         {
             if(pouchManager.Depense(turret.Cost))
             {
-                //place turret
+                terrainManager.BuildTurret(turret);
                 ToggleShowSelectionPanel(false);
             }
         }

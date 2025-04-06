@@ -1,10 +1,5 @@
 using Grids;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
 
 namespace GameState
 {
@@ -19,20 +14,9 @@ namespace GameState
         private GridTransition gridTransition;
         [SerializeField]
         private GameObject turretManager;
-        [SerializeField]
-        public TurretSO[] turretSOs;
 
         private Vector3Int selectedCellPos; 
 
-        private void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                OnClickLeftMouseToBuild();
-                BuildTurret(turretSOs[0], selectedCellPos); 
-            }
-            
-        }
         public bool OnClickLeftMouseToBuild()
         {
             if (gridTransition != null && gridTransition.upperGrid != null)
@@ -51,12 +35,12 @@ namespace GameState
             }
             return false;  
         }
-        public void BuildTurret(TurretSO turretSo, Vector3Int cellPos)
+        public void BuildTurret(TurretSO turretSo)
         {
             if (selectedCellPos != null)
             {
-                Vector2 cellPos2d = new Vector2(cellPos.x, cellPos.z);
-                GameObject turretGo = Instantiate(turretSo.Prefab, SnapToGrid(gridTransition.upperGrid.gameObject.GetComponent<Grid>(), cellPos), Quaternion.identity, turretManager.transform);
+                Vector2 cellPos2d = new Vector2(selectedCellPos.x, selectedCellPos.z);
+                GameObject turretGo = Instantiate(turretSo.Prefab, SnapToGrid(gridTransition.upperGrid.gameObject.GetComponent<Grid>(), selectedCellPos), Quaternion.identity, turretManager.transform);
                 gridTransition.upperGrid.SetContentAt(cellPos2d, turretGo);
             }
         }
