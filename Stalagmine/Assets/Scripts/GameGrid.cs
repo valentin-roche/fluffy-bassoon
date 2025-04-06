@@ -7,8 +7,8 @@ namespace Grids
     {
         [SerializeField] 
         public int gridSize = 24;
-        public List<Cell> voidCells;
-        private List<Cell> usedCells;
+        public List<Cell> VoidCells;
+        public List<Cell> UsedCells;
 
         public static List<Vector2> Directions = new List<Vector2>
         {
@@ -27,44 +27,43 @@ namespace Grids
 
         private void InitializeGrid()
         {
-            voidCells = new List<Cell>();
-            usedCells = new List<Cell>();
+            VoidCells = new List<Cell>();
+            UsedCells = new List<Cell>();           
 
-            
-            actualizeGrid(); 
+            ActualizeGrid(); 
         }
 
         public GameGrid(List<Cell> VoidCells, List<Cell> UsedCells)
         {
-            voidCells = VoidCells;
-            usedCells = UsedCells;
+            this.VoidCells = VoidCells;
+            this.UsedCells = UsedCells;
         }
 
-        private void actualizeGrid()
+        public void ActualizeGrid()
         {
-            foreach(Cell voidCell in voidCells)
+            foreach(Cell voidCell in VoidCells)
             {
                 foreach (Vector2 ouais in Directions) {
                     Cell neighb = getCellAt(voidCell.Position - ouais);
                     if (neighb.Status != Status.Void)
                     {
                         neighb.MakeVoid();
-                        voidCells.Insert(0, neighb);
+                        VoidCells.Insert(0, neighb);
                     }
                 }
             }
         }
 
-    public Cell getCellAt(Vector2 pos)
+        public Cell getCellAt(Vector2 pos)
         {
-            foreach(Cell voidCell in voidCells)
+            foreach(Cell voidCell in VoidCells)
             {
                 if(voidCell.Position == pos)
                 {
                     return voidCell; 
                 }
             }
-            foreach (Cell usedCell in usedCells)
+            foreach (Cell usedCell in UsedCells)
             {
                 if (usedCell.Position == pos)
                 {
@@ -73,9 +72,20 @@ namespace Grids
             }
             return new Cell(pos); 
         }
+
+        public void MakeVoidAt(Vector2 pos)
+        {
+            getCellAt(pos).MakeVoid();
+        }
+
+        public void SetContentAt(Vector2 pos, GameObject go)
+        {
+            getCellAt(pos).SetContent(go);
+        }
+
         public List<Cell> getVoidCells()
         {
-            return voidCells;
+            return VoidCells;
         }
     }
 

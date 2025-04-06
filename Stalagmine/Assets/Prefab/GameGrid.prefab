@@ -46,7 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridSize: 24
-  grid: {fileID: 7279191907725477562}
+  VoidCells: []
+  UsedCells: []
 --- !u!156049354 &7279191907725477562
 Grid:
   m_ObjectHideFlags: 0

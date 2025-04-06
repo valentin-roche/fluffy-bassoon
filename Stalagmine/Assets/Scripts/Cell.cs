@@ -24,6 +24,10 @@ namespace Grids
 
         public void SetContent(GameObject newContent)
         {
+            if (Status == Status.Void)
+            {
+                Destroy(newContent);
+            }
             Content = newContent;
             Status = (newContent != null) ? Status.Full : Status.Empty;
         }

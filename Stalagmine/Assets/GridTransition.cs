@@ -6,18 +6,47 @@ namespace Grids
     {
         private GameGrid upperGrid;
         private GameGrid lowerGrid;
+        private Vector3 lowerGridOffset = new Vector3(0, -15 , 0);
+        [SerializeField]
+        public GameGrid GameGridPrefab;
+        [SerializeField]
+        public int InitialVoidNum = 5;
 
-
-        private void InitalizeLowerGrid()
+        private void Start()
         {
-            foreach (Grids.Cell voidCellUpper in upperGrid.voidCells)
+            upperGrid = Instantiate(GameGridPrefab, upperGrid.transform.position - lowerGridOffset, Quaternion.identity);
+            for (int i = 0; i < InitialVoidNum; i++)
             {
-                int minRange = (int)-lowerGrid.gridSize / 2;
-                int maxRange = (int)lowerGrid.gridSize / 2;
-                /*Vector2 newPos = new Vector2(Random.Range(minRange, maxRange), Random.Range(minRange, maxRange));
-                Grids.Cell newCell = new Grids.Cell(newPos, Grids.Status.void);
-                lowerGrid.voidCells.Add(newCell); */
+                upperGrid.MakeVoidAt(GetRandomCellPos());
             }
+            lowerGrid = Instantiate(GameGridPrefab, upperGrid.transform.position - lowerGridOffset, Quaternion.identity);
+        }
+        private void PushLowerGrid()
+        {
+            for (int i = 0; i <= upperGrid.VoidCells.Count/4; i++)
+            {
+                Cell newCell = new Cell(GetRandomCellPos(), Status.Void);
+                lowerGrid.VoidCells.Add(newCell);
+            }
+            lowerGrid.ActualizeGrid();
+            foreach (var usedCell in upperGrid.UsedCells)
+            {
+                lowerGrid.SetContentAt(usedCell.Position, usedCell.Content);
+            }
+            upperGrid = lowerGrid;
+            lowerGrid = Instantiate(GameGridPrefab, upperGrid.transform.position - lowerGridOffset, Quaternion.identity);
+        }
+
+        public void ActualizeUpperGrid()
+        {
+            upperGrid.ActualizeGrid();
+        }
+
+        private Vector2 GetRandomCellPos()
+        {
+            int minRange = (int)-GameGridPrefab.gridSize / 2;
+            int maxRange = (int)GameGridPrefab.gridSize / 2;
+            return new Vector2(Random.Range(minRange, maxRange), Random.Range(minRange, maxRange));
         }
     }
 }
