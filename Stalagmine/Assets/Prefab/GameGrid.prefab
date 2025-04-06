@@ -47,7 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da08a63912741747a65d3ef8c04eb40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: 24
+  gridSize: {x: 0, y: 0}
+  grid: {fileID: 7279191907725477562}
   VoidCells: []
   UsedCells: []
 --- !u!156049354 &7279191907725477562
@@ -58,7 +59,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5222287977125647891}
   m_Enabled: 1
-  m_CellSize: {x: 1, y: 1, z: 1}
+  m_CellSize: {x: 10, y: 1, z: 10}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
@@ -93,7 +94,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

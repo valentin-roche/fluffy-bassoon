@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Grids
 {
@@ -7,7 +8,9 @@ namespace Grids
     public class GameGrid : MonoBehaviour
     {
         [SerializeField] 
-        public Vector2 gridSize = new Vector2(7,7);
+        public Vector2Int gridSize = new Vector2Int(11,11);
+        [SerializeField] 
+        private Grid grid;
         public List<Cell> VoidCells;
         public List<Cell> UsedCells;
         private Mesh mesh;
@@ -19,33 +22,15 @@ namespace Grids
             new Vector2(0, -1),
             new Vector2(0, 1)
         };
-
-
+        private Vector3[] vertices;
 
         void Start()
         {
             VoidCells = new List<Cell>();
             UsedCells = new List<Cell>();
             mesh = new Mesh();
-
-            Vector3[] vertices = new Vector3[3];
-            Vector2[] uv = new Vector2[3];
-            int[] triangles = new int[3];
-
-            vertices[0] = new Vector3(0, 0);
-            vertices[1] = new Vector3(0, 0, 100);
-            vertices[2] = new Vector3(100, 0, 100);
-
-            triangles[0] = 0;
-            triangles[1] = 1;
-            triangles[2] = 2;
-
-
-            mesh.vertices = vertices;
-            mesh.uv = uv;
-            mesh.triangles = triangles;
-
-            GetComponent<MeshFilter>().mesh = mesh;
+            mesh.name = "Grid";
+            RefreshMesh();
 
         }
 
@@ -67,6 +52,65 @@ namespace Grids
                         VoidCells.Insert(0, neighb);
                     }
                 }
+            }
+            RefreshMesh();
+        }
+
+        public void RefreshMesh()
+        {
+            Mesh newMesh = new Mesh();
+
+            // Handle vertices
+            vertices = new Vector3[(gridSize.x + 1) * (gridSize.y + 1)];
+            Vector2[] uv = new Vector2[vertices.Length];
+            for (int i = 0, y = 0; y <= gridSize.y; y++)
+            {
+                for (int x = 0; x <= gridSize.x; x++, i++)
+                {
+                    Vector3 cellCoordInGrid = GetCellCenterCoordInGrid(y, x);
+                    vertices[i] = new Vector3(x , 0, y) + cellCoordInGrid;
+                    uv[i] = new Vector2(x / gridSize.x, y / gridSize.y);
+                }
+            }
+            newMesh.vertices = vertices;
+            newMesh.uv = uv;
+
+            // Handle triangles
+            int[] triangles = new int[gridSize.x * gridSize.y * 6];
+
+            for (int ti = 0, vi = 0, y = 0; y < gridSize.y; y++, vi++)
+            {
+                for (int x = 0; x < gridSize.x; x++, ti += 6, vi++)
+                {
+                    triangles[ti] = vi;
+                    triangles[ti + 3] = triangles[ti + 2] = vi + 1;
+                    triangles[ti + 4] = triangles[ti + 1] = vi + gridSize.x + 1;
+                    triangles[ti + 5] = vi + gridSize.x + 2;
+                }
+            }
+            newMesh.triangles = triangles;
+            mesh.RecalculateNormals();
+
+            GetComponent<MeshFilter>().mesh = newMesh;
+        }
+
+        private Vector3 GetCellCenterCoordInGrid(int y, int x)
+        {
+            Vector3Int cellPosition = new Vector3Int(x, 0, y);
+            Vector3 coord = grid.GetCellCenterWorld(cellPosition);
+            return coord;
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (vertices == null)
+            {
+                return;
+            }
+            Gizmos.color = Color.black;
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Gizmos.DrawSphere(vertices[i], 0.1f);
             }
         }
 

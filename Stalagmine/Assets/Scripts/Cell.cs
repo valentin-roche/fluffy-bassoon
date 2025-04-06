@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Grids
 {
@@ -9,10 +10,12 @@ namespace Grids
         Full    
     }
 
-    public enum StatusMesh
-    {
-
-    }
+    //public Dictionary<Status, Mesh> StatusMesh = new Dictionary<Status, Mesh>
+    //{
+    //    { Status.Empty, Refs.EmptyMesh },
+    //    { Status.Void, Refs.VoidMesh },
+    //    { Status.Full, Refs.EmptyMesh }
+    //};
 
     public class Cell: MonoBehaviour
     {
@@ -55,7 +58,7 @@ namespace Grids
 
         //internal Mesh getMesh()
         //{
-            
+
         //}
     }
 }
