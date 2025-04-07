@@ -337,6 +337,10 @@ PrefabInstance:
       propertyPath: 'enemyGroups.Array.data[2]'
       value: 
       objectReference: {fileID: 11400000, guid: 6a577404bdba0a14d8ca903284329e58, type: 2}
+    - target: {fileID: 4392782010615267442, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4442811154861298851, guid: 867417bd6c697e14490eaf1785332880, type: 3}
       propertyPath: m_LocalPosition.z
       value: -40
@@ -409,6 +413,10 @@ PrefabInstance:
       propertyPath: sceneCamera
       value: 
       objectReference: {fileID: 1046415331}
+    - target: {fileID: 8994050734358139473, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: LayerParent
+      value: 
+      objectReference: {fileID: 1166381891}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8956164626969095617, guid: 867417bd6c697e14490eaf1785332880, type: 3}
@@ -1304,6 +1312,11 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &1166381891 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5151031732271375911, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+  m_PrefabInstance: {fileID: 266244701}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1166430092 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1000013227101710, guid: d9231829d3cedca409477c9327eb6425, type: 3}
@@ -1504,6 +1517,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  duration: 0
+  CameraPositions: []
+  GlobalSpotlight: {fileID: 0}
+  CameraSpotlight: {fileID: 0}
+  Camera: {fileID: 0}
 --- !u!1001 &1380736693
 PrefabInstance:
   m_ObjectHideFlags: 0
