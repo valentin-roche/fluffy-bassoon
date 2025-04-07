@@ -23,16 +23,19 @@ namespace GameState
         {
             if (gridTransition != null && gridTransition.upperGrid != null)
             {
-                Vector3 mousePos = inputManager.GetSelectedMapPosition();
-                Vector3Int gridPos = gridTransition.upperGrid.gameObject.GetComponent<Grid>().WorldToCell(mousePos);
-                Vector2 gridPos2d = new Vector2(gridPos.x, gridPos.z);
-                if(gridTransition.upperGrid.isVectorInGridGame(gridPos2d))
+                Vector3? mousePos = inputManager.GetSelectedMapPosition();
+                if(mousePos != null)
                 {
-                    if (gridTransition.upperGrid.isCellEmpty(gridPos2d))
+                    Vector3Int gridPos = gridTransition.upperGrid.gameObject.GetComponent<Grid>().WorldToCell(mousePos.Value);
+                    Vector2 gridPos2d = new Vector2(gridPos.x, gridPos.z);
+                    if (gridTransition.upperGrid.isVectorInGridGame(gridPos2d))
                     {
-                        selectedCellPos = gridPos;
-                        //HighlightSelectedCellFromUpperGrid(); 
-                        return true;
+                        if (gridTransition.upperGrid.isCellEmpty(gridPos2d))
+                        {
+                            selectedCellPos = gridPos;
+                            //HighlightSelectedCellFromUpperGrid(); 
+                            return true;
+                        }
                     }
                 }
             }

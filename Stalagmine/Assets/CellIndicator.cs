@@ -7,8 +7,8 @@ public class CellIndicator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 prout = inputManager.GetSelectedMapPosition();
-        prout.y = 0.2f;
-        GetComponent<Transform>().position = prout;
+        ///Vector3 prout = inputManager.GetSelectedMapPosition();
+        //prout.y = 0.2f;
+        //GetComponent<Transform>().position = prout;
     }
 }
