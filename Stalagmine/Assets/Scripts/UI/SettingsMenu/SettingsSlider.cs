@@ -13,7 +13,7 @@ namespace UI
 
         void Start()
         {
-            valueText.text = ((int)slider.value).ToString();
+            OnSliderValueChange(slider.value);
 
             slider.onValueChanged.AddListener(OnSliderValueChange);
         }
@@ -25,7 +25,7 @@ namespace UI
 
         private void OnSliderValueChange(float value)
         {
-            valueText.text = ((int)value).ToString();
+            valueText.text = ((int)(value*100)).ToString();
         }
     }
 }
