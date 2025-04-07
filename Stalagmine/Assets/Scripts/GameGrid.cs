@@ -394,7 +394,7 @@ namespace Grids
             cellInstance.transform.localScale = new Vector3(grid.cellSize.x, 1f, grid.cellSize.z);
             Cell cell = cellInstance.GetComponent<Cell>();
             cell.Position = pos;
-            cell.Status = status;
+            cell.SetStatus(status);
             return cellInstance.GetComponent<Cell>();
         }
     }
