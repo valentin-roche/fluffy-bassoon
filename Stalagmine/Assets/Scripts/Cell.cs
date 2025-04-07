@@ -7,15 +7,9 @@ namespace Grids
     {
         Empty, 
         Void,   
-        Full    
+        Full, 
+        Eternal
     }
-
-    //public Dictionary<Status, Mesh> StatusMesh = new Dictionary<Status, Mesh>
-    //{
-    //    { Status.Empty, Refs.EmptyMesh },
-    //    { Status.Void, Refs.VoidMesh },
-    //    { Status.Full, Refs.EmptyMesh }
-    //};
 
     public class Cell: MonoBehaviour
     {
@@ -40,25 +34,29 @@ namespace Grids
             Status = (newContent != null) ? Status.Full : Status.Empty;
         }
 
-        public void MakeVoid()
+        public bool MakeVoid()
         {
-            if (Status == Status.Full)
+            if (Status != Status.Eternal)
             {
-                Destroy(Content.gameObject);
+                if (Status == Status.Full)
+                {
+                    Destroy(Content.gameObject);
+                }
+                Status = Status.Void;
+                return true;
             }
-            Status = Status.Void;
+            return false;
         }
 
         public void Clear()
         {
             if (Content != null)
                 Object.Destroy(Content);
-            Status = Status.Empty;
+            if (Status != Status.Eternal)
+            {
+                Status = Status.Empty;
+            }
+
         }
-
-        //internal Mesh getMesh()
-        //{
-
-        //}
     }
 }

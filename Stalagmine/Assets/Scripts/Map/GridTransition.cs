@@ -14,34 +14,34 @@ namespace Grids
 
         private void Start()
         {
-            upperGrid = Instantiate<GameGrid>(GameGridPrefab, Vector3.zero, Quaternion.identity, this.transform);
+            upperGrid = Instantiate<GameGrid>(GameGridPrefab, GameGridPrefab.transform.position, Quaternion.identity, this.transform);
+            upperGrid.InitialVoidNum = 5;
             upperGrid.gameObject.SetActive(true);
-            for (int i = 0; i < InitialVoidNum; i++)
-            {
-                upperGrid.MakeVoidAt(GetRandomCellPos());
-            }
             lowerGrid = Instantiate(GameGridPrefab, upperGrid.transform.position - lowerGridOffset, Quaternion.identity, this.transform);
+            upperGrid.InitialVoidNum = 5;
+            PrepareNextGrid(lowerGrid);
             lowerGrid.gameObject.SetActive(true);
         }
-        private void PushLowerGrid()
+
+        private void PrepareNextGrid(GameGrid nextGrid)
         {
-            for (int i = 0; i <= upperGrid.VoidCells.Count/4; i++)
+            for (int i = 0; i <= upperGrid.VoidCells.Count / 4; i++)
             {
                 Cell newCell = new Cell(GetRandomCellPos(), Status.Void);
-                lowerGrid.VoidCells.Add(newCell);
+                nextGrid.VoidCells.Add(newCell);
             }
-            lowerGrid.ActualizeGrid();
+            nextGrid.ActualizeGrid();
+        }
+
+        private void PushLowerGrid()
+        {
+            
             foreach (var usedCell in upperGrid.UsedCells)
             {
                 lowerGrid.SetContentAt(usedCell.Position, usedCell.Content);
             }
             upperGrid = lowerGrid;
             lowerGrid = Instantiate(GameGridPrefab, upperGrid.transform.position - lowerGridOffset, Quaternion.identity);
-        }
-
-        public void ActualizeUpperGrid()
-        {
-            upperGrid.ActualizeGrid();
         }
 
         private Vector2 GetRandomCellPos()
