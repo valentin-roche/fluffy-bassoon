@@ -33,13 +33,21 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     [SerializeField]
     private RectTransform tutoPopupSecond;
 
-    [Header("Pause Menu")]
+    [Header("Pouch Menu")]
     [SerializeField]
     private TextMeshProUGUI pouchContent;
+    [SerializeField]
+    private RectTransform pouchContainer;
 
     [Header("Game Over Menu")]
     [SerializeField]
     private CanvasGroup gameOverCanvas;
+
+    [Header("CoinAnim")]
+    [SerializeField]
+    private GameObject coinAnimPrefab;
+    [SerializeField]
+    private RectTransform coinAnimContainer;
 
     private List<GameObject> turretsObjects;
 
@@ -56,6 +64,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         ShowTutoPanel(tutoPopupFirst);
 
         EventDispatcher.Instance.OnCoreDestroyed += OnGameOver;
+        EventDispatcher.Instance.OnEnemyDied += OnEnmyDied;
     }
 
     private void OnDestroy()
@@ -63,6 +72,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         if(EventDispatcher.Instance)
         {
             EventDispatcher.Instance.OnCoreDestroyed -= OnGameOver;
+            EventDispatcher.Instance.OnEnemyDied -= OnEnmyDied;
         }
         
         if (turretsObjects != null && turretsObjects.Count > 0) 
@@ -239,5 +249,18 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
 
         gameOverCanvas.gameObject.SetActive(true);
         gameOverCanvas.DOFade(1f, 3f).SetDelay(1.5f);
+    }
+
+    private void OnEnmyDied(Enemy enemy)
+    {
+        GameObject coinAnim = Instantiate(coinAnimPrefab, coinAnimContainer);
+        if (coinAnim.GetComponent<RectTransform>() is RectTransform transform)
+        {           
+            transform.position = EventDispatcher.Instance.MainCamera.WorldToScreenPoint(enemy.transform.position);
+        }
+        if(coinAnim.GetComponent<CoinAnimator>() is CoinAnimator animator)
+        {
+            animator.Animate(pouchContainer.position);
+        }
     }
 }
