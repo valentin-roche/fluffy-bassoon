@@ -22,7 +22,10 @@ namespace Grids
         public List<Cell> EmptyCells;
         private Mesh mesh;
 
-        
+        private List<Vector2> voidCellsPos;
+        private List<Vector2> eternalCellsPos;
+        private List<Vector2> usedCellsPos;
+
         public static List<Vector2> Directions = new List<Vector2>
         {
             new Vector2(1, 0),
@@ -37,6 +40,7 @@ namespace Grids
         int[] triangles;
         bool[] trianglesDisabled;
 
+        private int enternalsRange = 2;
 
         void Start()
         {
@@ -45,37 +49,51 @@ namespace Grids
             transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
             VoidCells = new List<Cell>();
             UsedCells = new List<Cell>();
-
-            
+            voidCellsPos = new List<Vector2>();
+            usedCellsPos = new List<Vector2>();
+            eternalCellsPos = new List<Vector2>();
 
             // Assign Void Cells
-            while (VoidCells.Count < InitialVoidNum)
+            while (voidCellsPos.Count < InitialVoidNum)
             {
                 Vector2 RandomPos = GetRandomCellPos();
-                if (VoidCells.Where(x => x.Position == RandomPos).FirstOrDefault() == null )
+                if (voidCellsPos.Contains(RandomPos) == false)
                 {
-                    MakeVoidAt(RandomPos);
+                    voidCellsPos.Add(RandomPos);
                 }
             }
 
-            UsedCells.Add(CreateCell(new Vector2(0, 0), Status.Full));
+            usedCellsPos.Add(new Vector2(0, 0));
+            //UsedCells.Add(CreateCell(new Vector2(0, 0), Status.Full));
             
             //Init eternal cells
-            for(int i=-2; i<2; i++)
+            for(int i=-enternalsRange; i<enternalsRange; i++)
             {
-                for(int j=-2; j<2; j++)
+                for(int j=-enternalsRange; j<enternalsRange; j++)
                 {
-                    EternalCells.Add(CreateCell(new Vector2(i, j), Status.Eternal));
+                    eternalCellsPos.Add(new Vector2(i, j));
                 }
             }
 
-            //Init empty cells
+            //Init cells
             for (int i = -gridSize.x; i < gridSize.x; i++)
             {
                 for (int j = -gridSize.y; j < gridSize.y; j++)
                 {
                     Vector2 gridPosition = new Vector2(i, j);
-                    if (EternalCells.Where(x => x.Position == gridPosition).FirstOrDefault() == null && UsedCells.Where(x => x.Position == gridPosition).FirstOrDefault() == null && VoidCells.Where(x => x.Position == gridPosition).FirstOrDefault() == null)
+                    if (voidCellsPos.Contains(gridPosition))
+                    {
+                        VoidCells.Add(CreateCell(gridPosition, Status.Void));
+                    }
+                    else if (eternalCellsPos.Contains(gridPosition))
+                    {
+                        EternalCells.Add(CreateCell(gridPosition, Status.Eternal));
+                    }
+                    else if (usedCellsPos.Contains(gridPosition))
+                    {
+                        UsedCells.Add(CreateCell(gridPosition, Status.Full));
+                    }
+                    else
                     {
                         EmptyCells.Add(CreateCell(gridPosition));
                     }
@@ -158,12 +176,12 @@ namespace Grids
             int minRange = (int)-gridSize.x;
             int maxRange = (int)gridSize.y;
             int randomX = Random.Range(minRange, maxRange);
-            while(randomX > -2 && randomX < 2)
+            while(randomX > -enternalsRange && randomX < enternalsRange)
             {
                 randomX = Random.Range(minRange, maxRange);
             }
             int randomY = Random.Range(minRange, maxRange);
-            while (randomY > -2 && randomX < 2)
+            while (randomY > -enternalsRange && randomX < enternalsRange)
             {
                 randomY = Random.Range(minRange, maxRange);
             }
