@@ -5,12 +5,12 @@ public class InputManager : MonoBehaviour
     [SerializeField]
     private Camera sceneCamera;
 
-    private Vector3 lastPosition;
+    private Vector3? lastPosition;
 
     [SerializeField]
     private LayerMask placementLayermask;
 
-    public Vector3 GetSelectedMapPosition()
+    public Vector3? GetSelectedMapPosition()
     {
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = sceneCamera.nearClipPlane;
@@ -19,6 +19,10 @@ public class InputManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 100, placementLayermask))
         {
             lastPosition = hit.point;
+        }
+        else
+        {
+            lastPosition = null;
         }
         return lastPosition;
     }

@@ -26,6 +26,10 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     [Header("Pause Menu")]
     [SerializeField]
     private GameObject pauseMenu;
+    [SerializeField]
+    private GameObject settings;
+    [SerializeField]
+    private Button closeSettingsButton;
 
     [Header("Tutorials")]
     [SerializeField]
@@ -94,15 +98,25 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && pauseMenu.activeInHierarchy == false && tutoPopupSecond.gameObject.activeInHierarchy == false && gameOverCanvas.gameObject.activeInHierarchy == false)
+        if (Input.GetMouseButtonDown(0) && pauseMenu.activeInHierarchy == false && settings.activeInHierarchy == false && tutoPopupSecond.gameObject.activeInHierarchy == false && gameOverCanvas.gameObject.activeInHierarchy == false)
         {
-            Vector2 mousePos = Input.mousePosition;
-            if (isSelectionShowned == false || (isSelectionShowned && turretSelectionPanel.rect.Contains(mousePos) == false))
+            Vector2 localMousePosition = turretSelectionPanel.InverseTransformPoint(Input.mousePosition);
+            if (isSelectionShowned)
             {
-                if(terrainManager.OnClickLeftMouseToBuild())
+                if (turretSelectionPanel.rect.Contains(localMousePosition) == false)
+                {
+                    if (terrainManager.OnClickLeftMouseToBuild() == false)
+                    {
+                        ToggleShowSelectionPanel(false);
+                    }
+                }
+            }
+            else
+            {
+                if (terrainManager.OnClickLeftMouseToBuild())
                 {
                     ToggleShowSelectionPanel(true);
-                }                
+                }
             }
         }
 
@@ -116,6 +130,10 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
             {
                 ToggleShowSelectionPanel(false);
                 terrainManager.CancelSelection();
+            }
+            else if(settings.activeInHierarchy)
+            {
+                closeSettingsButton.onClick?.Invoke();
             }
             else
             {
