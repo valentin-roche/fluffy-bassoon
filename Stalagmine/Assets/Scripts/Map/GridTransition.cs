@@ -12,6 +12,8 @@ namespace Grids
         public GameObject GameGridPrefab;
         [SerializeField]
         public int InitialVoidNum = 5;
+        [SerializeField]
+        public int VoidPas = 2;
 
         private int minRange;
         private int maxRange;
@@ -20,13 +22,13 @@ namespace Grids
         {
             GameObject upperGo = Instantiate(GameGridPrefab, transform);
             upperGrid = upperGo.GetComponent<GameGrid>();
-            upperGrid.InitialVoidNum = 5;
+            upperGrid.InitialVoidNum = 3;
             upperGrid.gameObject.SetActive(true);
             GameObject lowerGo = Instantiate(GameGridPrefab, transform);
             lowerGo.transform.position = upperGrid.transform.position - lowerGridOffset;
             lowerGrid = lowerGo.GetComponent<GameGrid>();
-            upperGrid.InitialVoidNum = 5;
-            PrepareNextGrid(lowerGrid);
+            lowerGrid.InitialVoidNum = 5;
+            //PrepareNextGrid(lowerGrid);
             lowerGrid.gameObject.SetActive(true);
 
             minRange = (int)-upperGrid.gridSize.x;
@@ -59,6 +61,32 @@ namespace Grids
         private Vector2 GetRandomCellPos()
         {
             return new Vector2(Random.Range(minRange, maxRange), Random.Range(minRange, maxRange));
+        }
+
+        public void DestroyBoard()
+        {
+            Destroy(upperGrid.gameObject);
+
+            upperGrid = lowerGrid;
+
+            upperGrid.transform.position = new Vector3(upperGrid.transform.position.x, 0f, upperGrid.transform.position.z);
+
+            GameObject lowerGo = Instantiate(GameGridPrefab, transform);
+            lowerGo.transform.position = upperGrid.transform.position - lowerGridOffset;
+
+            lowerGrid = lowerGo.GetComponent<GameGrid>();
+
+            lowerGrid.InitialVoidNum = upperGrid.InitialVoidNum + VoidPas;
+            lowerGrid.gameObject.SetActive(true);
+        }
+
+        //tmp
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                DestroyBoard();
+            }
         }
     }
 }
