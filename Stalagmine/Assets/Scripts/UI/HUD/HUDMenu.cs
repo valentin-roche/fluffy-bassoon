@@ -134,6 +134,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
             }
             else if(isSelectionShowned)
             {
+                terrainManager.cellIndicator.Unlock();
                 ToggleShowSelectionPanel(false);
                 terrainManager.CancelSelection();
             }
