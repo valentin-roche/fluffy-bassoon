@@ -17,8 +17,11 @@ public class CellIndicator : MonoBehaviour
         if (pos.HasValue && IsInBound(pos.Value))
         {
             Vector3Int cellPosinGrid = gridTransition.upperGrid.gameObject.GetComponent<Grid>().WorldToCell(new Vector3Int((int)pos.Value.x, (int)pos.Value.y, (int)pos.Value.z));
+
             Vector3 cellPosInWorld = gridTransition.upperGrid.gameObject.GetComponent<Grid>().GetCellCenterWorld(cellPosinGrid);
-            cellPosInWorld.y = 0.1f;
+            cellPosInWorld.y = 0.55f;
+            cellPosInWorld.x -= 0.65f;
+            cellPosInWorld.z -= 0.65f;
             if (cellPosInWorld != null)
             {
                 transform.position = cellPosInWorld;
@@ -49,7 +52,7 @@ public class CellIndicator : MonoBehaviour
         }
         else
         {
-            Position.y = 0.05f;
+            Position.y = 0.5f;
             selectedCellIndicator.transform.position = Position;
             Lock();
             return true;

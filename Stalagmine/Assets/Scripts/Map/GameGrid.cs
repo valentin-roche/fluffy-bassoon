@@ -395,9 +395,9 @@ namespace Grids
             }
 
             //Init cells
-            for (int i = -gridSize.x; i <= gridSize.x; i++)
+            for (int i = -gridSize.x/2; i <= gridSize.x/2; i++)
             {
-                for (int j = -gridSize.y; j <= gridSize.y; j++)
+                for (int j = -gridSize.y/2; j <= gridSize.y/2; j++)
                 {
                     Vector2 gridPosition = new Vector2(i, j);
                     if (voidCellsPos.Contains(gridPosition))
