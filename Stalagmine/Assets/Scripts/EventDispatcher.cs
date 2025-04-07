@@ -17,6 +17,14 @@ public class EventDispatcher : MonoBehaviour
         Instance = new EventDispatcher();
     }
 
+    private void Update()
+    {
+        if(Instance == null)
+        {
+            Instance = new EventDispatcher();
+        }
+    }
+
     public void EnemyDied(Enemy enemy)
     {
         GetMoneyFromKill?.Invoke(enemy.GetSO().Reward);

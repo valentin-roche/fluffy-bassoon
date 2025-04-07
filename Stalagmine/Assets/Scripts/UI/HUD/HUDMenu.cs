@@ -96,10 +96,10 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     {
         if (Input.GetMouseButtonDown(0) && pauseMenu.activeInHierarchy == false && tutoPopupSecond.gameObject.activeInHierarchy == false && gameOverCanvas.gameObject.activeInHierarchy == false)
         {
-            Vector2 mousePos = Input.mousePosition;
+            Vector2 localMousePosition = turretSelectionPanel.InverseTransformPoint(Input.mousePosition);
             if (isSelectionShowned)
             {
-                if (turretSelectionPanel.rect.Contains(mousePos) == false)
+                if (turretSelectionPanel.rect.Contains(localMousePosition) == false)
                 {
                     if (terrainManager.OnClickLeftMouseToBuild() == false)
                     {
