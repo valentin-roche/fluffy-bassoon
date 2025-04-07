@@ -40,17 +40,15 @@ namespace Grids
         int[] triangles;
         bool[] trianglesDisabled;
 
-        private int enternalsRange = 1;
+        private int enternalsRange = 2;
 
         void Start()
         {
             // Set to center
-            float centeringOffset = -gridSize.x * grid.cellSize.x / 4;
-            transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
+            //float centeringOffset = -gridSize.x * grid.cellSize.x / 4;
+            //transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
             VoidCells = new List<Cell>();
             UsedCells = new List<Cell>();
-            EternalCells = new List<Cell>();
-            EmptyCells = new List<Cell>();
             voidCellsPos = new List<Vector2>();
             usedCellsPos = new List<Vector2>();
             eternalCellsPos = new List<Vector2>();
@@ -74,6 +72,7 @@ namespace Grids
         public void RefreshMesh()
         {
             Mesh newMesh = new Mesh();
+            newMesh.name = mesh?.name;
 
             // Handle vertices
             Vector3[] vertices = new Vector3[(gridSize.x + 1) * (gridSize.y + 1)];
@@ -126,6 +125,11 @@ namespace Grids
             s.FindProperty("m_IsReadable").boolValue = true;
             GetComponent<MeshFilter>().mesh = mesh;
             GetComponent<MeshCollider>().sharedMesh = mesh;
+
+            //if(!IsLowerGrid)
+            //    transform.position = Vector3.zero;
+            //else
+            //    transform.position = new Vector3(0, -20, 0);
         }
 
         private Vector2 GetRandomCellPos()
@@ -255,6 +259,10 @@ namespace Grids
         {
             Vector3Int gridPosition = new Vector3Int(x, 0, y);
             Vector3 coord = grid.CellToWorld(gridPosition);
+
+            coord = new Vector3(coord.x - (gridSize.x * grid.cellSize.x / 2f), 0, coord.z - (gridSize.y * grid.cellSize.z / 2f));
+
+            coord.y = 0;
             return coord;
         }
 
@@ -369,35 +377,31 @@ namespace Grids
                 Destroy(child.gameObject);
             }
 
-            usedCellsPos.Add(new Vector2(0, 0));
-
-            //Init eternal cells
-            for (int i = -enternalsRange; i <= enternalsRange; i++)
-            {
-                for (int j = -enternalsRange; j <= enternalsRange; j++)
-                {
-                    Vector2 tmpPos = new Vector2(i, j);
-                    if (usedCellsPos.Contains(tmpPos) == false && eternalCellsPos.Contains(tmpPos) == false)
-                    {
-                        eternalCellsPos.Add(tmpPos);
-                    }                 
-                }
-            }
-
             // Assign Void Cells
             while (voidCellsPos.Count < InitialVoidNum)
             {
                 Vector2 RandomPos = GetRandomCellPos();
-                if (voidCellsPos.Contains(RandomPos) == false && eternalCellsPos.Contains(RandomPos) == false && usedCellsPos.Contains(RandomPos) == false )
+                if (voidCellsPos.Contains(RandomPos) == false)
                 {
                     voidCellsPos.Add(RandomPos);
                 }
             }
 
-            //Init cells
-            for (int i = -gridSize.x; i <= gridSize.x; i++)
+            usedCellsPos.Add(new Vector2(0, 0));
+
+            //Init eternal cells
+            for (int i = -enternalsRange; i < enternalsRange; i++)
             {
-                for (int j = -gridSize.y; j <= gridSize.y; j++)
+                for (int j = -enternalsRange; j < enternalsRange; j++)
+                {
+                    eternalCellsPos.Add(new Vector2(i, j));
+                }
+            }
+
+            //Init cells
+            for (int i = -gridSize.x; i < gridSize.x; i++)
+            {
+                for (int j = -gridSize.y; j < gridSize.y; j++)
                 {
                     Vector2 gridPosition = new Vector2(i, j);
                     if (voidCellsPos.Contains(gridPosition))
@@ -420,5 +424,6 @@ namespace Grids
             }
         }
     }
+
 }
     

@@ -45,16 +45,31 @@ public class GameLoopManager : MonoBehaviour
         }
     }
 
-    public IEnumerator DestroyLayer()
+    IEnumerator DestroyLayer()
     {
-        LayerParent.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+        var toDestroy = LayerParent.transform.GetChild(0);
+        var posFin = toDestroy.position;
 
-        for (var i = 1; i < LayerParent.transform.GetChild(0).transform.childCount; i++)
+        for (var i = 0; i < toDestroy.transform.childCount; i++)
         {
-            var enf = LayerParent.transform.GetChild(0).transform.GetChild(i);
-            if (enf != null)
+            var enf = toDestroy.transform.GetChild(i);
+            if (enf != null && enf.GetComponent<MeshRenderer>().isVisible)
                 enf.GetComponent<MeshDestroy>().DestroyMesh();
+            else if (!enf.GetComponent<MeshRenderer>().isVisible)
+                Destroy(enf.gameObject);
         }
-        yield return null;
+        Destroy(toDestroy.gameObject);
+
+        float time = 0;
+        float duration = 5f;
+        var toGetUp = LayerParent.transform.GetChild(1);
+        var posDepart = toGetUp.gameObject.transform.position;
+        while (time < duration)
+        {
+            toGetUp.position = Vector3.Lerp(posDepart, posFin, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        toGetUp.position = posFin;
     }
 }

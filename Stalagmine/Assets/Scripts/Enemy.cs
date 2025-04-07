@@ -86,9 +86,9 @@ public class Enemy : MonoBehaviour
         float time = 0;
         Vector3 startScale = transform.localScale;
 
-        while(time < 5)
+        while(time < 1)
         {
-            transform.localScale = Vector3.Lerp(startScale, Vector3.zero, time / 5);
+            transform.localScale = Vector3.Lerp(startScale, Vector3.zero, time / 1);
             time += Time.deltaTime;
 
             yield return null;
