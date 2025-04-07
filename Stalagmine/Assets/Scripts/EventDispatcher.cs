@@ -21,6 +21,7 @@ public class EventDispatcher : MonoBehaviour
     public event Action<int> GetMoneyFromKill;
     public event Action OnCoreDestroyed;
     public event Action<Enemy> OnEnemyDied;
+    public event Action<int> OnLayerChanged;
 
     public Camera MainCamera => mainCamera;
     private Camera mainCamera;
@@ -44,6 +45,11 @@ public class EventDispatcher : MonoBehaviour
     public void SetMainCamera(Camera cam)
     {
         mainCamera = cam;
+    }
+
+    public void LayerDestroyed(int layerLevel)
+    {
+        OnLayerChanged?.Invoke(layerLevel);
     }
 
 }
