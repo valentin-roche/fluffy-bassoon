@@ -32,6 +32,7 @@ public class Core : Building
 
         if (HealthManager.IsDead())
         {
+            GetComponent<ParticleSystem>().Stop();
             DestroyCore();
         }
     }
