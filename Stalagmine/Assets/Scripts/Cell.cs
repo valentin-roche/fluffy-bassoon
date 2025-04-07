@@ -34,7 +34,7 @@ namespace Grids
             Status = (newContent != null) ? Status.Full : Status.Empty;
         }
 
-        public void MakeVoid()
+        public bool MakeVoid()
         {
             if (Status != Status.Eternal)
             {
@@ -43,9 +43,9 @@ namespace Grids
                     Destroy(Content.gameObject);
                 }
                 Status = Status.Void;
-
+                return true;
             }
-            
+            return false;
         }
 
         public void Clear()

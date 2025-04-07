@@ -3,16 +3,19 @@ using UnityEngine;
 using System;
 using UnityEditor;
 using UnityEngine.LowLevelPhysics;
+using System.Linq;
+using Unity.VisualScripting;
 
 namespace Grids
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     public class GameGrid : MonoBehaviour
     {
-        [SerializeField] 
-        public Vector2Int gridSize = new Vector2Int(11,11);
-        [SerializeField] 
-        public Grid grid;
+        [SerializeField]
+        public Vector2Int gridSize = new Vector2Int(11, 11);
+        [SerializeField]
+        private Grid grid;
+        public int InitialVoidNum = 5;
         public List<Cell> VoidCells;
         public List<Cell> UsedCells;
         public List<Cell> EternalCells; 
@@ -30,6 +33,7 @@ namespace Grids
 
         private Vector3[] vertices;
         List<int>[] trisWithVertex;
+        int[] triangles;
         bool[] trianglesDisabled;
 
 
@@ -40,7 +44,16 @@ namespace Grids
             transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
             VoidCells = new List<Cell>();
             UsedCells = new List<Cell>();
-            UsedCells.Add(new Cell(new Vector2(0, 0), Status.Full)); 
+
+            // Assign Void Cells
+            while (VoidCells.Count < InitialVoidNum)
+            {
+                MakeVoidAt(GetRandomCellPos());
+            }
+
+            UsedCells.Add(new Cell(new Vector2(0, 0), Status.Full));
+            
+            //Init eternal cells
             for(int i=-2; i<2; i++)
             {
                 for(int j=-2; j<2; j++)
@@ -48,14 +61,124 @@ namespace Grids
                     EternalCells.Add(new Cell(new Vector2(i, j), Status.Eternal));
                 }
             }
+
             Debug.Log(EternalCells.Count); 
+
+            // Init Mesh
             mesh = new Mesh();
             mesh.name = "Grid";
-            RefreshMesh();
 
+            vertices = new Vector3[(gridSize.x + 1) * (gridSize.y + 1)];
+            List<int>[] trisWithVertex;
+            triangles = new int[gridSize.x * gridSize.y * 6];
+            trianglesDisabled = new bool[triangles.Length];
+
+            RefreshMesh();
         }
 
-        public GameGrid(List<Cell> VoidCells, List<Cell> UsedCells, List<Cell> eternalCells)
+        public void RefreshMesh()
+        {
+            Mesh newMesh = new Mesh();
+
+            // Handle vertices
+            Vector3[] vertices = new Vector3[(gridSize.x + 1) * (gridSize.y + 1)];
+            Vector2[] uv = new Vector2[vertices.Length];
+            for (int i = 0, y = 0; y <= gridSize.y; y++)
+            {
+                for (int x = 0; x <= gridSize.x; x++, i++)
+                {
+                    vertices[i] = GetCellCenterCoordFromGridPos(y, x);
+                    uv[i] = new Vector2(x / gridSize.x, y / gridSize.y);
+                }
+            }
+            newMesh.SetVertices(vertices);
+            this.vertices = vertices;
+            newMesh.SetUVs(0, uv);
+
+            // Handle triangles
+            int[] triangles = new int[gridSize.x * gridSize.y * 6];
+
+            for (int ti = 0, vi = 0, y = 0; y < gridSize.y; y++, vi++)
+            {
+                for (int x = 0; x < gridSize.x; x++, ti += 6, vi++)
+                {
+                    triangles[ti] = vi;
+                    triangles[ti + 3] = triangles[ti + 2] = vi + 1;
+                    triangles[ti + 4] = triangles[ti + 1] = vi + gridSize.x + 1;
+                    triangles[ti + 5] = vi + gridSize.x + 2;
+                }
+            }
+
+            trisWithVertex = new List<int>[vertices.Length];
+            for (int i = 0; i < vertices.Length; ++i)
+            {
+                trisWithVertex[i] = IndexOf(triangles, i);
+            }
+
+            newMesh.triangles = triangles;
+
+            bool[] vm = getVoidMap(newMesh);
+            newMesh.triangles = triangles.RemoveAllSpecifiedIndicesFromArray(vm).ToArray();
+
+
+            newMesh.vertices = vertices;
+            this.vertices = vertices;
+            newMesh.uv = uv;
+            newMesh.triangles = triangles;
+            newMesh.RecalculateNormals();
+            mesh = newMesh;
+            SerializedObject s = new SerializedObject(mesh);
+            s.FindProperty("m_IsReadable").boolValue = true;
+            GetComponent<MeshFilter>().mesh = mesh;
+            GetComponent<MeshCollider>().sharedMesh = mesh;
+        }
+
+        private Vector2 GetRandomCellPos()
+        {
+            int minRange = (int)-gridSize.x;
+            int maxRange = (int)gridSize.y;
+            return new Vector2(UnityEngine.Random.Range(minRange, maxRange), UnityEngine.Random.Range(minRange, maxRange));
+        }
+
+        /// <summary>
+        /// Returns Triangles in the provided mesh affected at the pos of a cell
+        /// </summary>
+        /// <param name="gridPos"></param>
+        /// <param name="TargetMesh"></param>
+        /// <returns></returns>
+        public bool[] SelectCellInMeshAt(Vector2 gridPos, Mesh TargetMesh) {
+            Cell cell = getCellAt(gridPos);
+            Vector3 cellRealPos = grid.CellToWorld(new Vector3Int((int)cell.Position.x, 0, (int)cell.Position.y));
+            bool[] tiranglesAffected = new bool[TargetMesh.triangles.Length];
+            for (int i = 0; i < vertices.Length; ++i)
+            {
+                if (vertices[i] == cellRealPos)
+                {
+                    for (int j = 0; j < trisWithVertex[i].Count; ++j)
+                    {
+                        int value = trisWithVertex[i][j];
+                        int remainder = value % 3;
+                        tiranglesAffected[value - remainder] = true;
+                        tiranglesAffected[value - remainder + 1] = true;
+                        tiranglesAffected[value - remainder + 2] = true;
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < trisWithVertex[i].Count; ++j)
+                    {
+                        int value = trisWithVertex[i][j];
+                        int remainder = value % 3;
+                        tiranglesAffected[value - remainder] = false;
+                        tiranglesAffected[value - remainder + 1] = false;
+                        tiranglesAffected[value - remainder + 2] = false;
+                    }
+                }
+            }
+            return tiranglesAffected;
+        }
+
+        public GameGrid(List<Cell> VoidCells, List<Cell> UsedCells, List<Cell> eternalCells)        
         {
             this.VoidCells = VoidCells;
             this.UsedCells = UsedCells;
@@ -65,17 +188,15 @@ namespace Grids
         public void Update()
         {
             // Set to center
-            float centeringOffset = -gridSize.x * grid.cellSize.x / 4;
-            transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
-            RefreshMesh();
+            //float centeringOffset = -gridSize.x * grid.cellSize.x / 4;
+            //transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
+            //RefreshMesh();
 
         }
 
-        
-
         public void ActualizeGrid()
         {
-            foreach(Cell voidCell in VoidCells)
+            foreach (Cell voidCell in VoidCells)
             {
                 foreach (Vector2 ouais in Directions) {
                     Cell neighb = getCellAt(voidCell.Position - ouais);
@@ -98,63 +219,17 @@ namespace Grids
             RefreshMesh();
         }
 
-        public void RefreshMesh()
+
+        private bool[] getVoidMap(Mesh newMesh)
         {
-            Mesh newMesh = new Mesh();
-
-            // Handle vertices
-            Vector3[] vertices = new Vector3[(gridSize.x + 1) * (gridSize.y + 1)];
-            Vector2[] uv = new Vector2[vertices.Length];
-            for (int i = 0, y = 0; y <= gridSize.y; y++)
+            bool[] trianglesAffectedByVoid = new bool[newMesh.triangles.Length];
+            // Pour chaque Cell void => get affected cells puis disable
+            foreach (Cell voidCell in VoidCells)
             {
-                for (int x = 0; x <= gridSize.x; x++, i++)
-                {
-                    vertices[i] = GetCellCenterCoordFromGridPos(y, x);
-                    uv[i] = new Vector2(x / gridSize.x, y / gridSize.y);
-                }
+                bool[] trianglesAffectedByVoidCell = SelectCellInMeshAt(voidCell.Position, newMesh);
+                trianglesAffectedByVoid = trianglesAffectedByVoid.Merge(trianglesAffectedByVoidCell).ToArray();
             }
-            newMesh.vertices = vertices;
-            this.vertices = vertices;
-            newMesh.uv = uv;
-
-            // Handle triangles
-            int[] triangles = new int[gridSize.x * gridSize.y * 6];
-            trianglesDisabled = new bool[triangles.Length];
-
-            for (int ti = 0, vi = 0, y = 0; y < gridSize.y; y++, vi++)
-            {
-                for (int x = 0; x < gridSize.x; x++, ti += 6, vi++)
-                {
-                    triangles[ti] = vi;
-                    triangles[ti + 3] = triangles[ti + 2] = vi + 1;
-                    triangles[ti + 4] = triangles[ti + 1] = vi + gridSize.x + 1;
-                    triangles[ti + 5] = vi + gridSize.x + 2;
-                }
-            }
-
-            trisWithVertex = new List<int>[vertices.Length];
-            for (int i = 0; i < vertices.Length; ++i)
-            {
-                trisWithVertex[i] = IndexOf(triangles, i);
-            }
-
-            newMesh.triangles = triangles;
-
-
-            newMesh.RecalculateNormals();
-            mesh = newMesh;
-            SerializedObject s = new SerializedObject(mesh);
-            s.FindProperty("m_IsReadable").boolValue = true;
-            GetComponent<MeshFilter>().mesh = mesh;
-
-
-            SyncMeshCollider();
-
-        }
-
-        public void SyncMeshCollider()
-        {
-            GetComponent<MeshCollider>().sharedMesh = mesh;
+            return trianglesAffectedByVoid;
         }
 
         private List<int> IndexOf(int[] triangles, int i)
@@ -178,26 +253,13 @@ namespace Grids
             return coord;
         }
 
-        private void OnDrawGizmos()
-        {
-            if (vertices == null)
-            {
-                return;
-            }
-            Gizmos.color = Color.black;
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                Gizmos.DrawSphere(vertices[i], 0.1f);
-            }
-        }
-
         public Cell getCellAt(Vector2 pos)
         {
-            foreach(Cell voidCell in VoidCells)
+            foreach (Cell voidCell in VoidCells)
             {
-                if(voidCell.Position == pos)
+                if (voidCell.Position == pos)
                 {
-                    return voidCell; 
+                    return voidCell;
                 }
             }
             foreach (Cell usedCell in UsedCells)
@@ -207,7 +269,7 @@ namespace Grids
                     return usedCell;
                 }
             }
-            return new Cell(pos); 
+            return new Cell(pos);
         }
 
         public Cell getUsedCellAt(Vector2 pos)
@@ -238,12 +300,17 @@ namespace Grids
                     return false;
                 }
             }
-            return true; 
+            return true;
         }
 
         public void MakeVoidAt(Vector2 pos)
         {
-            getCellAt(pos).MakeVoid();
+            Cell target = getCellAt(pos);
+            if (target.Status != Status.Void)
+            {
+                target.MakeVoid();
+                VoidCells.Add(getCellAt(pos));
+            }
         }
 
 

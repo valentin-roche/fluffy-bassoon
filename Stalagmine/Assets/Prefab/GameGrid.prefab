@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3460692256239068166}
   - component: {fileID: 7371829925004104801}
   - component: {fileID: 1507782846260511379}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,8 +50,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridSize: {x: 9, y: 9}
   grid: {fileID: 7279191907725477562}
+  InitialVoidNum: 5
   VoidCells: []
   UsedCells: []
+  EternalCells: []
 --- !u!156049354 &7279191907725477562
 Grid:
   m_ObjectHideFlags: 0
