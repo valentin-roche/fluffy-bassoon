@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using UnityEngine;
-using System;
-using UnityEditor;
-using UnityEngine.LowLevelPhysics;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor;
+using UnityEngine;
 
 namespace Grids
 {
@@ -14,11 +12,14 @@ namespace Grids
         [SerializeField]
         public Vector2Int gridSize = new Vector2Int(11, 11);
         [SerializeField]
+        public GameObject cellPrefab;
+        [SerializeField]
         private Grid grid;
         public int InitialVoidNum = 5;
         public List<Cell> VoidCells;
         public List<Cell> UsedCells;
-        public List<Cell> EternalCells; 
+        public List<Cell> EternalCells;
+        public List<Cell> EmptyCells;
         private Mesh mesh;
 
         
@@ -45,20 +46,39 @@ namespace Grids
             VoidCells = new List<Cell>();
             UsedCells = new List<Cell>();
 
+            
+
             // Assign Void Cells
             while (VoidCells.Count < InitialVoidNum)
             {
-                MakeVoidAt(GetRandomCellPos());
+                Vector2 RandomPos = GetRandomCellPos();
+                if (VoidCells.Where(x => x.Position == RandomPos).FirstOrDefault() == null )
+                {
+                    MakeVoidAt(RandomPos);
+                }
             }
 
-            UsedCells.Add(new Cell(new Vector2(0, 0), Status.Full));
+            UsedCells.Add(CreateCell(new Vector2(0, 0), Status.Full));
             
             //Init eternal cells
             for(int i=-2; i<2; i++)
             {
                 for(int j=-2; j<2; j++)
                 {
-                    EternalCells.Add(new Cell(new Vector2(i, j), Status.Eternal));
+                    EternalCells.Add(CreateCell(new Vector2(i, j), Status.Eternal));
+                }
+            }
+
+            //Init empty cells
+            for (int i = -gridSize.x; i < gridSize.x; i++)
+            {
+                for (int j = -gridSize.y; j < gridSize.y; j++)
+                {
+                    Vector2 gridPosition = new Vector2(i, j);
+                    if (EternalCells.Where(x => x.Position == gridPosition).FirstOrDefault() == null && UsedCells.Where(x => x.Position == gridPosition).FirstOrDefault() == null && VoidCells.Where(x => x.Position == gridPosition).FirstOrDefault() == null)
+                    {
+                        EmptyCells.Add(CreateCell(gridPosition));
+                    }
                 }
             }
 
@@ -137,7 +157,17 @@ namespace Grids
         {
             int minRange = (int)-gridSize.x;
             int maxRange = (int)gridSize.y;
-            return new Vector2(UnityEngine.Random.Range(minRange, maxRange), UnityEngine.Random.Range(minRange, maxRange));
+            int randomX = Random.Range(minRange, maxRange);
+            while(randomX > -2 && randomX < 2)
+            {
+                randomX = Random.Range(minRange, maxRange);
+            }
+            int randomY = Random.Range(minRange, maxRange);
+            while (randomY > -2 && randomX < 2)
+            {
+                randomY = Random.Range(minRange, maxRange);
+            }
+            return new Vector2(randomX, randomY);
         }
 
         /// <summary>
@@ -269,7 +299,7 @@ namespace Grids
                     return usedCell;
                 }
             }
-            return new Cell(pos);
+            return CreateCell(pos);
         }
 
         public Cell getUsedCellAt(Vector2 pos)
@@ -334,6 +364,20 @@ namespace Grids
                 return true;
             }
             return false;
+        }
+
+        public Cell CreateCell(Vector2 pos, Status status = Status.Empty)
+        {
+            Vector3 WorldPosition = grid.CellToWorld(new Vector3Int((int)pos.x, 0, (int)pos.y));
+            GameObject cellInstance = Instantiate(cellPrefab, transform);
+            cellInstance.name = "Cell("+pos.x+","+pos.y+")";
+            //cellInstance.transform.InverseTransformPoint(WorldPosition);
+            cellInstance.transform.position = new Vector3(pos.x * grid.cellSize.x, grid.transform.position.y, pos.y * grid.cellSize.z);
+            cellInstance.transform.localScale = new Vector3(grid.cellSize.x, 1f, grid.cellSize.z);
+            Cell cell = cellInstance.GetComponent<Cell>();
+            cell.Position = pos;
+            cell.Status = status;
+            return cellInstance.GetComponent<Cell>();
         }
     }
 

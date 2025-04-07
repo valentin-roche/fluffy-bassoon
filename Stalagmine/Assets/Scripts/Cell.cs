@@ -13,15 +13,23 @@ namespace Grids
 
     public class Cell: MonoBehaviour
     {
-        public Status Status { get; private set; }
+        [SerializeField]
+        private GameObject renderObject;
+
+        public Status Status { get; set; }
         public GameObject Content { get; private set; }
-        public Vector2 Position { get; private set; }
+        public Vector2 Position { get; set; }
 
         public Cell(Vector2 position, Status status = Status.Empty, GameObject content = null)
         {
             Position = position;
             Status = status;
             Content = content;
+
+            if(status == Status.Void)
+            {
+                renderObject.SetActive(false);
+            }
         }
 
         public void SetContent(GameObject newContent)
@@ -43,6 +51,7 @@ namespace Grids
                     Destroy(Content.gameObject);
                 }
                 Status = Status.Void;
+                renderObject.SetActive(true);
                 return true;
             }
             return false;
