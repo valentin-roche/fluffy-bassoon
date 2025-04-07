@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderMesh: {fileID: 4658529651409293814}
+  meshCollider: {fileID: 2936683752156677152}
 --- !u!23 &4658529651409293814
 MeshRenderer:
   m_ObjectHideFlags: 0
