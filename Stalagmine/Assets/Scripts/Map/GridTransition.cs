@@ -30,7 +30,7 @@ namespace Grids
                 Cell newCell = new Cell(GetRandomCellPos(), Status.Void);
                 nextGrid.VoidCells.Add(newCell);
             }
-            nextGrid.ActualizeGrid();
+            // nextGrid.ActualizeGrid();
         }
 
         private void PushLowerGrid()
