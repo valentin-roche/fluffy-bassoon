@@ -21,8 +21,6 @@ namespace Grids
         public List<Cell> EternalCells; 
         private Mesh mesh;
 
-        public bool IsLowerGrid;
-
         
         public static List<Vector2> Directions = new List<Vector2>
         {

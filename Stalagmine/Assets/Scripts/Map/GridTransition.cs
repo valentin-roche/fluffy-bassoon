@@ -20,7 +20,6 @@ namespace Grids
 
             upperGrid = Instantiate<GameGrid>(GameGridPrefab, transform.position, Quaternion.identity, this.transform);
             upperGrid.InitialVoidNum = 5;
-            upperGrid.IsLowerGrid = false;
             upperGrid.gameObject.SetActive(true);
             var nextLayer = upperGrid.transform.position;
 
@@ -30,7 +29,6 @@ namespace Grids
 
             lowerGrid = Instantiate<GameGrid>(GameGridPrefab, transform.position - new Vector3(0, 20, 0), Quaternion.identity, this.transform);
             lowerGrid.InitialVoidNum = 5;
-            lowerGrid.IsLowerGrid = true;
             //PrepareNextGrid(lowerGrid);
             lowerGrid.gameObject.SetActive(true);
         }
