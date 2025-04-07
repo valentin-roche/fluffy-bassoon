@@ -14,7 +14,7 @@ public class CameraMovement : MonoBehaviour
     int positionIndex = 0;
 
     public Light GlobalSpotlight;
-    public Light CameraSpotlight;
+    public Light DirectLight;
     bool camSpotlight = false;
     public Camera Camera;
 
@@ -107,7 +107,8 @@ public class CameraMovement : MonoBehaviour
         Quaternion rotStartValue = cameraTransform.rotation;
         Vector3 posStartValue = cameraTransform.position;
 
-        float startIntensity = CameraSpotlight.intensity;
+        float startIntensity = DirectLight.intensity;
+        float startCamSize = Camera.orthographicSize;
 
 
         while (time < duration)
@@ -115,13 +116,22 @@ public class CameraMovement : MonoBehaviour
             cameraTransform.rotation = Quaternion.Lerp(rotStartValue, transform.rotation, curve.Evaluate(time / duration));
             cameraTransform.position = Vector3.Lerp(posStartValue, transform.position, curve.Evaluate(time / duration));
 
-            if (lightOn)
+            if(positionIndex > 0)
             {
-                CameraSpotlight.intensity = Mathf.Lerp(startIntensity, 5000, curve.Evaluate(time / duration));
+                Camera.orthographicSize = Mathf.Lerp(startCamSize, 55, curve.Evaluate(time / duration));
             }
             else
             {
-                CameraSpotlight.intensity = Mathf.Lerp(startIntensity, 0, curve.Evaluate(time / duration));
+                Camera.orthographicSize = Mathf.Lerp(startCamSize, 30, curve.Evaluate(time / duration));
+            }
+
+            if (lightOn)
+            {
+                DirectLight.intensity = Mathf.Lerp(startIntensity, 2, curve.Evaluate(time / duration));
+            }
+            else
+            {
+                DirectLight.intensity = Mathf.Lerp(startIntensity, 0, curve.Evaluate(time / duration));
             }
 
             time += Time.deltaTime;

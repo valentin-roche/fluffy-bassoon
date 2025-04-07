@@ -47,16 +47,22 @@ public class GameLoopManager : MonoBehaviour
 
     IEnumerator DestroyLayer()
     {
-        var toDestroy = LayerParent.transform.GetChild(1);
+        var toDestroy = LayerParent.transform.GetChild(0);
         var posFin = toDestroy.position;
-        toDestroy.gameObject.SetActive(false);
-        //if (toDestroy != null)
-        //    toDestroy.GetComponent<MeshDestroy>().DestroyMesh();
 
+        for (var i = 0; i < toDestroy.transform.childCount; i++)
+        {
+            var enf = toDestroy.transform.GetChild(i);
+            if (enf != null && enf.GetComponent<MeshRenderer>().isVisible)
+                enf.GetComponent<MeshDestroy>().DestroyMesh();
+            else if (!enf.GetComponent<MeshRenderer>().isVisible)
+                Destroy(enf.gameObject);
+        }
+        Destroy(toDestroy.gameObject);
 
         float time = 0;
-        float duration = 2f;
-        var toGetUp = LayerParent.transform.GetChild(2);
+        float duration = 5f;
+        var toGetUp = LayerParent.transform.GetChild(1);
         var posDepart = toGetUp.gameObject.transform.position;
         while (time < duration)
         {

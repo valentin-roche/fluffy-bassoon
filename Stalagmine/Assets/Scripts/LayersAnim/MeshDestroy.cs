@@ -39,11 +39,9 @@ public class MeshDestroy : MonoBehaviour
             {
                 var bounds = parts[i].Bounds;
                 bounds.Expand(0.5f);
-                var randomNess = new Vector3(UnityEngine.Random.Range(bounds.center.x - (bounds.size.x / 4), bounds.center.x + (bounds.size.x / 4)),
-                                             UnityEngine.Random.Range(bounds.center.y - (bounds.size.y / 4), bounds.center.y + (bounds.size.y / 4)),
-                                             UnityEngine.Random.Range(bounds.center.z - (bounds.size.z / 4), bounds.center.z + (bounds.size.z / 4)));
-                var plane = new Plane(UnityEngine.Random.onUnitSphere, randomNess);
-
+                var plane = new Plane(UnityEngine.Random.onUnitSphere, new Vector3(UnityEngine.Random.Range(bounds.min.x, bounds.max.x),
+                                                                                   UnityEngine.Random.Range(bounds.min.y, bounds.max.y),
+                                                                                   UnityEngine.Random.Range(bounds.min.z, bounds.max.z)));
 
                 subParts.Add(GenerateMesh(parts[i], plane, true));
                 subParts.Add(GenerateMesh(parts[i], plane, false));
