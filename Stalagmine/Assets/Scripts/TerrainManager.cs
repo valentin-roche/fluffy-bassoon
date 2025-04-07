@@ -15,7 +15,7 @@ namespace GameState
         [SerializeField]
         private GameObject turretManager;
 
-        private Vector3Int selectedCellPos; 
+        private Vector3Int? selectedCellPos; 
 
         public bool OnClickLeftMouseToBuild()
         {
@@ -39,8 +39,8 @@ namespace GameState
         {
             if (selectedCellPos != null)
             {
-                Vector2 cellPos2d = new Vector2(selectedCellPos.x, selectedCellPos.z);
-                GameObject turretGo = Instantiate(turretSo.Prefab, SnapToGrid(gridTransition.upperGrid.gameObject.GetComponent<Grid>(), selectedCellPos), Quaternion.identity, turretManager.transform);
+                Vector2 cellPos2d = new Vector2(selectedCellPos.Value.x, selectedCellPos.Value.z);
+                GameObject turretGo = Instantiate(turretSo.Prefab, SnapToGrid(gridTransition.upperGrid.gameObject.GetComponent<Grid>(), selectedCellPos.Value), Quaternion.identity, turretManager.transform);
                 gridTransition.upperGrid.SetContentAt(cellPos2d, turretGo);
             }
         }
@@ -50,6 +50,11 @@ namespace GameState
             pos = grid.GetCellCenterWorld(cellPos);
             pos.y = 0; 
             return pos;
+        }
+
+        public void CancelSelection()
+        {
+            selectedCellPos = null;
         }
     }
 

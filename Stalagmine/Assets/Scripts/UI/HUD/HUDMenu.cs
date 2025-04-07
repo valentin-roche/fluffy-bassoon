@@ -105,6 +105,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
             else if(isSelectionShowned)
             {
                 ToggleShowSelectionPanel(false);
+                terrainManager.CancelSelection();
             }
             else
             {
@@ -230,7 +231,13 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
 
     private void OnGameOver()
     {
+        if (isSelectionShowned)
+        {
+            ToggleShowSelectionPanel(false);
+            terrainManager.CancelSelection();
+        }
+
         gameOverCanvas.gameObject.SetActive(true);
-        gameOverCanvas.DOFade(1f, 1f);
+        gameOverCanvas.DOFade(1f, 3f).SetDelay(1.5f);
     }
 }

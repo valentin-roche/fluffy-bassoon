@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: MinigunDefinition
   m_EditorClassIdentifier: 
   turret: {fileID: 11400000, guid: 04cb1821948738d4f8c6d359689b8caa, type: 2}
-  turretIcon: {fileID: 21300000, guid: bf3f6d023d8570d40a3a079783911d4f, type: 3}
+  turretIcon: {fileID: 8400000, guid: afb3174ebc5bdb54ea5d54e95f43a811, type: 2}
   turretName: Minigun

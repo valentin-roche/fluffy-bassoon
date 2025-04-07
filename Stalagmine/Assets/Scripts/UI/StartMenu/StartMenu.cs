@@ -9,11 +9,9 @@ namespace UI.Menus
         [SerializeField]
         private GameObject settingsContainer;
         [SerializeField]
-        private GameObject buttonsContainer;
-        [SerializeField]
-        private GameObject titleContainer;
-        [SerializeField]
         private CanvasGroup fadeOutCanvas;
+        [SerializeField]
+        private GameObject startMenuContainer;
 
         private void Start()
         {
@@ -48,8 +46,7 @@ namespace UI.Menus
 
         private void Display(bool display)
         {
-            titleContainer.SetActive(display);
-            buttonsContainer.SetActive(display);
+            startMenuContainer.SetActive(display);
             settingsContainer.SetActive(!display);
         }
     }
