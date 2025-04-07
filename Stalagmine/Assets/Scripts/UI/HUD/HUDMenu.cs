@@ -53,6 +53,10 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     [SerializeField]
     private RectTransform coinAnimContainer;
 
+    [Header("Layer")]
+    [SerializeField]
+    private TextMeshProUGUI layerText;
+
     private List<GameObject> turretsObjects;
 
     private bool isSelectionShowned = false;
@@ -69,6 +73,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
 
         EventDispatcher.Instance.OnCoreDestroyed += OnGameOver;
         EventDispatcher.Instance.OnEnemyDied += OnEnmyDied;
+        EventDispatcher.Instance.OnLayerChanged += UpdateLayerLevel;
     }
 
     private void OnDestroy()
@@ -77,6 +82,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         {
             EventDispatcher.Instance.OnCoreDestroyed -= OnGameOver;
             EventDispatcher.Instance.OnEnemyDied -= OnEnmyDied;
+            EventDispatcher.Instance.OnLayerChanged -= UpdateLayerLevel;
         }
         
         if (turretsObjects != null && turretsObjects.Count > 0) 
@@ -128,6 +134,7 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
             }
             else if(isSelectionShowned)
             {
+                terrainManager.cellIndicator.Unlock();
                 ToggleShowSelectionPanel(false);
                 terrainManager.CancelSelection();
             }
@@ -280,5 +287,10 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         {
             animator.Animate(pouchContainer.position);
         }
+    }
+
+    private void UpdateLayerLevel(int level)
+    {
+        layerText.text = level.ToString();
     }
 }
