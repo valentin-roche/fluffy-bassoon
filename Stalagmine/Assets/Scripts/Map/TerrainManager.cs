@@ -1,4 +1,5 @@
 using Grids;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GameState
@@ -24,7 +25,7 @@ namespace GameState
             if (gridTransition != null && gridTransition.upperGrid != null)
             {
                 Vector3? mousePos = inputManager.GetSelectedMapPosition();
-                if(mousePos != null)
+                if(mousePos != null && mousePos.Value.y > -10f )
                 {
                     Vector3Int gridPos = gridTransition.upperGrid.gameObject.GetComponent<Grid>().WorldToCell(mousePos.Value);
                     Vector2 gridPos2d = new Vector2(gridPos.x, gridPos.z);
@@ -33,7 +34,6 @@ namespace GameState
                         if (gridTransition.upperGrid.isCellEmpty(gridPos2d))
                         {
                             selectedCellPos = gridPos;
-                            cellIndicator.Lock();
                             return cellIndicator.SetlockedCellPosition(gridTransition.upperGrid.gameObject.GetComponent<Grid>().GetCellCenterWorld(gridPos)); 
                         }
                     }
@@ -41,13 +41,6 @@ namespace GameState
             }
             return false;  
         }
-
-        /*public void HighlightSelectedCellFromUpperGrid()
-        {
-            Vector3 selectCellGridCenter = SnapToGrid(gridTransition.upperGrid.grid,selectedCellPos);
-            Vector3 selectCellGridToWorld = gridTransition.upperGrid.grid.CellToWorld(new Vector3Int((int)selectCellGridCenter.x,(int)selectCellGridCenter.y, (int)selectCellGridCenter.z)); 
-            cellIndicator.transform.position = selectCellGridToWorld;
-        }*/
 
 
         public void BuildTurret(TurretSO turretSo)
@@ -57,8 +50,8 @@ namespace GameState
                 Vector2 cellPos2d = new Vector2(selectedCellPos.Value.x, selectedCellPos.Value.z);
                 
                 GameObject turretGo = Instantiate(turretSo.Prefab, SnapToGrid(gridTransition.upperGrid.gameObject.GetComponent<Grid>(), selectedCellPos.Value), Quaternion.identity, turretManager.transform);
-                turretGo.name = selectedCellPos.ToString(); 
-                cellIndicator.lockCellIndicator = false; 
+                turretGo.name = selectedCellPos.ToString();
+                cellIndicator.Unlock(); 
                 gridTransition.upperGrid.SetContentAt(cellPos2d, turretGo);
                 
             }
