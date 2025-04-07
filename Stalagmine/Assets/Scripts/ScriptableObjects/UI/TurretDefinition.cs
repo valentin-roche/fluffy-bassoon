@@ -6,11 +6,11 @@ public class TurretDefinition : ScriptableObject
     [SerializeField]
     private TurretSO turret;
     [SerializeField]
-    private Sprite turretIcon;
+    private RenderTexture turretIcon;
     [SerializeField]
     private string turretName;
 
     public TurretSO Turret => turret;
-    public Sprite TurretIcon => turretIcon;
+    public RenderTexture TurretIcon => turretIcon;
     public string TurretName => turretName;
 }

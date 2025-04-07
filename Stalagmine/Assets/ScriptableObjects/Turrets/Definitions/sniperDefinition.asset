@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: sniperDefinition
   m_EditorClassIdentifier: 
   turret: {fileID: 11400000, guid: a03bb38208eb988429293f0924dd6354, type: 2}
-  turretIcon: {fileID: 21300000, guid: 827fab3c64eee2a479813a4799ed12a3, type: 3}
+  turretIcon: {fileID: 8400000, guid: 4aa44bca116015e4ea35554d410ca3f7, type: 2}
   turretName: Sniper

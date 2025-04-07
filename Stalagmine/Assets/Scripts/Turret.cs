@@ -30,7 +30,7 @@ public class Turret : Building
         GetComponent<SphereCollider>().radius = TurretSO.Range;
         Spotlight.spotAngle = (TurretSO.Range*10);
         Spotlight.innerSpotAngle = (TurretSO.Range*5);
-        InvokeRepeating("ShootAction", 0.0f, ((1.0f + Random.Range(-0.05f, 0.05f)) / TurretSO.FireRate));
+        //InvokeRepeating("ShootAction", 0.0f, ((1.0f + Random.Range(-0.05f, 0.05f)) / TurretSO.FireRate));
     }
 
     private void OnDestroy()
@@ -70,6 +70,7 @@ public class Turret : Building
         if (currentTarget != null && canShoot)
         {
             ShootAtTarget();
+            delayTimer = (1.0f + Random.Range(-0.05f, 0.05f)) / TurretSO.FireRate;
         }
     }
 
@@ -84,6 +85,7 @@ public class Turret : Building
             targets.Add(collider.gameObject);
 
             collider.gameObject.GetComponent<Enemy>().OnEnemyDeath += RemoveTarget;
+            collider.gameObject.GetComponent<Enemy>().OnEnemyAttack += RemoveTarget;
 
             if (currentTarget == null)
                 SetNewTarget();
@@ -130,11 +132,19 @@ public class Turret : Building
         }
     }
 
+    float delayTimer = 0f;
+
     private void Update()
     {
+        delayTimer -= Time.deltaTime;
 
         if(currentTarget != null && canShoot)
             transform.LookAt(currentTarget.transform);
+
+        if(delayTimer < 0f)
+        {
+            ShootAction();
+        }
     }
 
     void ShootAtTarget()

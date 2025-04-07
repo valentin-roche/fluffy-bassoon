@@ -7,6 +7,8 @@ public class WaveManager : MonoBehaviour
 {
     public EnemyGroupSO[] enemyGroups;
 
+    [SerializeField] int waveValue = 50;
+
     public void SpawnWave(int waveValue)
     {
         int spawnedValue = 0;
@@ -41,6 +43,6 @@ public class WaveManager : MonoBehaviour
 
     public void StartWave()
     {
-        SpawnWave(1);
+        SpawnWave(waveValue);
     }
 }

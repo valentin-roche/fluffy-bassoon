@@ -51,15 +51,12 @@ namespace GameState
         {
             if (selectedCellPos != null)
             {
-                if (selectedCellPos != null)
-                {
-                    Vector2 cellPos2d = new Vector2(selectedCellPos.x, selectedCellPos.z);
-                    
-                    GameObject turretGo = Instantiate(turretSo.Prefab, SnapToGrid(gridTransition.upperGrid.gameObject.GetComponent<Grid>(), selectedCellPos), Quaternion.identity, turretManager.transform);
-                    turretGo.name = selectedCellPos.ToString(); 
-                    gridTransition.upperGrid.SetContentAt(cellPos2d, turretGo);
-                    Debug.Log(gridTransition.upperGrid.UsedCells.Count); 
-                }
+                Vector2 cellPos2d = new Vector2(selectedCellPos.x, selectedCellPos.z);
+                
+                GameObject turretGo = Instantiate(turretSo.Prefab, SnapToGrid(gridTransition.upperGrid.gameObject.GetComponent<Grid>(), selectedCellPos), Quaternion.identity, turretManager.transform);
+                turretGo.name = selectedCellPos.ToString(); 
+                gridTransition.upperGrid.SetContentAt(cellPos2d, turretGo);
+                Debug.Log(gridTransition.upperGrid.UsedCells.Count); 
             }
         }
         public Vector3 SnapToGrid(Grid grid, Vector3 pos)
@@ -69,7 +66,10 @@ namespace GameState
             return pos;
         }
 
-        
+        public void CancelSelection()
+        {
+            selectedCellPos = Vector3Int.zero;
+        }
     }
 
 }
