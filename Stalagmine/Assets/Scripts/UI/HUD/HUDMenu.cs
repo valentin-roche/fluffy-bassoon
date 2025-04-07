@@ -97,12 +97,22 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
         if (Input.GetMouseButtonDown(0) && pauseMenu.activeInHierarchy == false && tutoPopupSecond.gameObject.activeInHierarchy == false && gameOverCanvas.gameObject.activeInHierarchy == false)
         {
             Vector2 mousePos = Input.mousePosition;
-            if (isSelectionShowned == false || (isSelectionShowned && turretSelectionPanel.rect.Contains(mousePos) == false))
+            if (isSelectionShowned)
             {
-                if(terrainManager.OnClickLeftMouseToBuild())
+                if (turretSelectionPanel.rect.Contains(mousePos) == false)
+                {
+                    if (terrainManager.OnClickLeftMouseToBuild() == false)
+                    {
+                        ToggleShowSelectionPanel(false);
+                    }
+                }
+            }
+            else
+            {
+                if (terrainManager.OnClickLeftMouseToBuild())
                 {
                     ToggleShowSelectionPanel(true);
-                }                
+                }
             }
         }
 
