@@ -61,7 +61,7 @@ public class Enemy : MonoBehaviour
 
     public void KillEnemy()
     {
-        Debug.Log("Called");
+        GetComponent<BoxCollider>().enabled = false;
 
         isDyingHelpHim = true;
 
@@ -76,7 +76,6 @@ public class Enemy : MonoBehaviour
 
     public void DestroyEnemy()
     {
-        GetComponent<BoxCollider>().enabled = false;
         StartCoroutine(DisappearEnemy());
 
         //Destroy(gameObject);
@@ -94,13 +93,6 @@ public class Enemy : MonoBehaviour
 
             yield return null;
         }
-
-        Destroy(gameObject);
-    }
-
-    IEnumerator waitCoroutine()
-    {
-        yield return new WaitForSeconds(1);
 
         Destroy(gameObject);
     }
