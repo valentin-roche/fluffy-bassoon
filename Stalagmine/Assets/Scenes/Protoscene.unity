@@ -749,7 +749,7 @@ MonoBehaviour:
   CameraPositions: []
   GlobalSpotlight: {fileID: 0}
   CameraSpotlight: {fileID: 0}
-  Camera: {fileID: 0}
+  Camera: {fileID: 622631394}
 --- !u!1001 &1615107583
 PrefabInstance:
   m_ObjectHideFlags: 0

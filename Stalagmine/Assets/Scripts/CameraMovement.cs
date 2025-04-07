@@ -24,6 +24,7 @@ public class CameraMovement : MonoBehaviour
     {
         targetvalue = transform.rotation;
         cameraTransform = GetComponentInChildren<Camera>().transform.parent;
+        EventDispatcher.Instance.SetMainCamera(Camera);
     }
 
     private void Update()
