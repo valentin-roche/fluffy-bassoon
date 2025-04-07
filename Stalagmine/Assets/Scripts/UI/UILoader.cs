@@ -1,3 +1,4 @@
+using GameState;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,7 +12,7 @@ public class UILoader : MonoBehaviour
 
     [Header("Components")]
     [SerializeField]
-    private PouchManager pouchManager;
+    private GameObject componentsContainer;
 
     private ICommunicateWithGameplay currentMenu;
 
@@ -44,7 +45,8 @@ public class UILoader : MonoBehaviour
 
             if(currentMenu != null)
             {
-                currentMenu.GiveContex(pouchManager);
+                currentMenu.GiveContex(componentsContainer.GetComponent<PouchManager>(),
+                                       componentsContainer.GetComponent<TerrainManager>());
             }
         }
     }
