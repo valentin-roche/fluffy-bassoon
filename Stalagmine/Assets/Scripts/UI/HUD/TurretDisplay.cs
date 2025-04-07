@@ -14,7 +14,7 @@ namespace UI
         [SerializeField]
         private GameObject redFilter;
         [SerializeField]
-        private Image turretIcon;
+        private RawImage turretIcon;
         [SerializeField]
         private TextMeshProUGUI turretName;
         [SerializeField]
@@ -35,7 +35,7 @@ namespace UI
         {
             turretDefinition = def;
 
-            turretIcon.sprite = turretDefinition.TurretIcon;
+            turretIcon.texture = turretDefinition.TurretIcon;
             turretName.text = turretDefinition.TurretName;
 
             TurretSO turret = turretDefinition.Turret;

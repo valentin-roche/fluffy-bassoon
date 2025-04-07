@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TurretDefinition
   m_EditorClassIdentifier: 
   turret: {fileID: 11400000, guid: 0dbc908a4134b5e4097fc45ca393ea75, type: 2}
-  turretIcon: {fileID: 21300000, guid: eb4e5b57001c94544a0a6d477f271db7, type: 3}
+  turretIcon: {fileID: 8400000, guid: e06120b62607b47448a76541b2b7284e, type: 2}
   turretName: Turret
