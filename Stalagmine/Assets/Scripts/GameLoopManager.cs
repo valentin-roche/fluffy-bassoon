@@ -8,7 +8,6 @@ public class GameLoopManager : MonoBehaviour
     public bool IsWin = false;
 
     public GameObject LayerParent;
-    public GameObject Turrets;
 
     private void Start()
     {
