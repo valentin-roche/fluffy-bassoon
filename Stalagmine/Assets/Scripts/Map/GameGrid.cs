@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using UnityEngine;
-using System;
-using UnityEditor;
-using UnityEngine.LowLevelPhysics;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor;
+using UnityEngine;
 
 namespace Grids
 {
@@ -14,14 +12,20 @@ namespace Grids
         [SerializeField]
         public Vector2Int gridSize = new Vector2Int(11, 11);
         [SerializeField]
+        public GameObject cellPrefab;
+        [SerializeField]
         private Grid grid;
         public int InitialVoidNum = 5;
         public List<Cell> VoidCells;
         public List<Cell> UsedCells;
-        public List<Cell> EternalCells; 
+        public List<Cell> EternalCells;
+        public List<Cell> EmptyCells;
         private Mesh mesh;
 
-        
+        private List<Vector2> voidCellsPos;
+        private List<Vector2> eternalCellsPos;
+        private List<Vector2> usedCellsPos;
+
         public static List<Vector2> Directions = new List<Vector2>
         {
             new Vector2(1, 0),
@@ -36,6 +40,7 @@ namespace Grids
         int[] triangles;
         bool[] trianglesDisabled;
 
+        private int enternalsRange = 1;
 
         void Start()
         {
@@ -44,23 +49,13 @@ namespace Grids
             transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
             VoidCells = new List<Cell>();
             UsedCells = new List<Cell>();
+            EternalCells = new List<Cell>();
+            EmptyCells = new List<Cell>();
+            voidCellsPos = new List<Vector2>();
+            usedCellsPos = new List<Vector2>();
+            eternalCellsPos = new List<Vector2>();
 
-            // Assign Void Cells
-            while (VoidCells.Count < InitialVoidNum)
-            {
-                MakeVoidAt(GetRandomCellPos());
-            }
-
-            UsedCells.Add(new Cell(new Vector2(0, 0), Status.Full));
-            
-            //Init eternal cells
-            for(int i=-2; i<2; i++)
-            {
-                for(int j=-2; j<2; j++)
-                {
-                    EternalCells.Add(new Cell(new Vector2(i, j), Status.Eternal));
-                }
-            }
+            GenerateCellsGrid();
 
             Debug.Log(EternalCells.Count); 
 
@@ -137,7 +132,17 @@ namespace Grids
         {
             int minRange = (int)-gridSize.x;
             int maxRange = (int)gridSize.y;
-            return new Vector2(UnityEngine.Random.Range(minRange, maxRange), UnityEngine.Random.Range(minRange, maxRange));
+            int randomX = Random.Range(minRange, maxRange);
+            while(randomX > -enternalsRange && randomX < enternalsRange)
+            {
+                randomX = Random.Range(minRange, maxRange);
+            }
+            int randomY = Random.Range(minRange, maxRange);
+            while (randomY > -enternalsRange && randomY < enternalsRange)
+            {
+                randomY = Random.Range(minRange, maxRange);
+            }
+            return new Vector2(randomX, randomY);
         }
 
         /// <summary>
@@ -269,7 +274,7 @@ namespace Grids
                     return usedCell;
                 }
             }
-            return new Cell(pos);
+            return CreateCell(pos);
         }
 
         public Cell getUsedCellAt(Vector2 pos)
@@ -327,6 +332,12 @@ namespace Grids
             return VoidCells;
         }
 
+        public void SetNumberOfVoid(int value)
+        {
+            InitialVoidNum = value;
+            GenerateCellsGrid();
+        }
+
         public bool isVectorInGridGame(Vector2 Pos)
         { 
             if (-gridSize.x < Pos.x && Pos.x < gridSize.x && -gridSize.y < Pos.y && Pos.y < gridSize.y)
@@ -335,7 +346,79 @@ namespace Grids
             }
             return false;
         }
-    }
 
+        public Cell CreateCell(Vector2 pos, Status status = Status.Empty)
+        {
+            Vector3 WorldPosition = grid.CellToWorld(new Vector3Int((int)pos.x, 0, (int)pos.y));
+            GameObject cellInstance = Instantiate(cellPrefab, transform);
+            cellInstance.name = "Cell("+pos.x+","+pos.y+")";
+            //cellInstance.transform.InverseTransformPoint(WorldPosition);
+            cellInstance.transform.position = new Vector3(pos.x * grid.cellSize.x, grid.transform.position.y, pos.y * grid.cellSize.z);
+            cellInstance.transform.localScale = new Vector3(grid.cellSize.x, 1f, grid.cellSize.z);
+            Cell cell = cellInstance.GetComponent<Cell>();
+            cell.Position = pos;
+            cell.SetStatus(status);
+            return cellInstance.GetComponent<Cell>();
+        }
+
+        private void GenerateCellsGrid()
+        {
+            //Destroy Existing cells
+            foreach (Transform child in transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            usedCellsPos.Add(new Vector2(0, 0));
+
+            //Init eternal cells
+            for (int i = -enternalsRange; i <= enternalsRange; i++)
+            {
+                for (int j = -enternalsRange; j <= enternalsRange; j++)
+                {
+                    Vector2 tmpPos = new Vector2(i, j);
+                    if (usedCellsPos.Contains(tmpPos) == false && eternalCellsPos.Contains(tmpPos) == false)
+                    {
+                        eternalCellsPos.Add(tmpPos);
+                    }                 
+                }
+            }
+
+            // Assign Void Cells
+            while (voidCellsPos.Count < InitialVoidNum)
+            {
+                Vector2 RandomPos = GetRandomCellPos();
+                if (voidCellsPos.Contains(RandomPos) == false && eternalCellsPos.Contains(RandomPos) == false && usedCellsPos.Contains(RandomPos) == false )
+                {
+                    voidCellsPos.Add(RandomPos);
+                }
+            }
+
+            //Init cells
+            for (int i = -gridSize.x; i <= gridSize.x; i++)
+            {
+                for (int j = -gridSize.y; j <= gridSize.y; j++)
+                {
+                    Vector2 gridPosition = new Vector2(i, j);
+                    if (voidCellsPos.Contains(gridPosition))
+                    {
+                        VoidCells.Add(CreateCell(gridPosition, Status.Void));
+                    }
+                    else if (eternalCellsPos.Contains(gridPosition))
+                    {
+                        EternalCells.Add(CreateCell(gridPosition, Status.Eternal));
+                    }
+                    else if (usedCellsPos.Contains(gridPosition))
+                    {
+                        UsedCells.Add(CreateCell(gridPosition, Status.Full));
+                    }
+                    else
+                    {
+                        EmptyCells.Add(CreateCell(gridPosition));
+                    }
+                }
+            }
+        }
+    }
 }
     

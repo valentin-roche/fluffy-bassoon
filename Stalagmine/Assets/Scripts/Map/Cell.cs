@@ -13,14 +13,20 @@ namespace Grids
 
     public class Cell: MonoBehaviour
     {
-        public Status Status { get; private set; }
+        [SerializeField]
+        private MeshRenderer renderMesh;
+
+        [SerializeField]
+        private MeshCollider meshCollider;
+
+        public Status Status { get ; set ; }
         public GameObject Content { get; private set; }
-        public Vector2 Position { get; private set; }
+        public Vector2 Position { get; set; }
 
         public Cell(Vector2 position, Status status = Status.Empty, GameObject content = null)
         {
             Position = position;
-            Status = status;
+            SetStatus(status);
             Content = content;
         }
 
@@ -57,6 +63,13 @@ namespace Grids
                 Status = Status.Empty;
             }
 
+        }
+
+        public void SetStatus(Status s)
+        {
+            Status = s;
+            renderMesh.enabled = Status != Status.Void;
+            meshCollider.enabled = Status != Status.Void;
         }
     }
 }
