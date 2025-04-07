@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4658529651409293814}
   - component: {fileID: 8053072752083771887}
   - component: {fileID: 2936683752156677152}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1001426181538284170
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 3911443214753461682}
   - component: {fileID: 7855843473663661820}
   - component: {fileID: 2131188268222522901}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RenderObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
