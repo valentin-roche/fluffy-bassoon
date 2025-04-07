@@ -19,6 +19,9 @@ namespace Grids
         [SerializeField]
         private MeshCollider meshCollider;
 
+        [SerializeField]
+        private Transform highlight;
+
         public Status Status { get ; set ; }
         public GameObject Content { get; private set; }
         public Vector2 Position { get; set; }
@@ -70,6 +73,11 @@ namespace Grids
             Status = s;
             renderMesh.enabled = Status != Status.Void;
             meshCollider.enabled = Status != Status.Void;
+        }
+
+        public void Highligh(bool doHighlight)
+        {
+            highlight.gameObject.SetActive(doHighlight);
         }
     }
 }

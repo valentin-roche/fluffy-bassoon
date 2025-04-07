@@ -1,5 +1,5 @@
 using Grids;
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 namespace GameState
@@ -18,14 +18,21 @@ namespace GameState
 
         private Vector3Int? selectedCellPos;
         [SerializeField]
-        public CellIndicator cellIndicator;
+        private GameObject cellIndicator;
 
         public bool OnClickLeftMouseToBuild()
         {
             if (gridTransition != null && gridTransition.upperGrid != null)
             {
+                if (selectedCellPos != null)
+                {
+                    Vector2 selectedGridPos2d = new Vector2(selectedCellPos.Value.x, selectedCellPos.Value.z);
+                    gridTransition.upperGrid.getCellAt(selectedGridPos2d).Highligh(false);
+                    selectedCellPos = null;
+                }
                 Vector3? mousePos = inputManager.GetSelectedMapPosition();
-                if(mousePos != null && mousePos.Value.y > -10f )
+
+                if(mousePos != null)
                 {
                     Vector3Int gridPos = gridTransition.upperGrid.gameObject.GetComponent<Grid>().WorldToCell(mousePos.Value);
                     Vector2 gridPos2d = new Vector2(gridPos.x, gridPos.z);
@@ -34,13 +41,21 @@ namespace GameState
                         if (gridTransition.upperGrid.isCellEmpty(gridPos2d))
                         {
                             selectedCellPos = gridPos;
-                            return cellIndicator.SetlockedCellPosition(gridTransition.upperGrid.gameObject.GetComponent<Grid>().GetCellCenterWorld(gridPos)); 
+                            gridTransition.upperGrid.getCellAt(gridPos2d).Highligh(true);
+                            return true;
                         }
                     }
                 }
             }
             return false;  
         }
+
+        /*public void HighlightSelectedCellFromUpperGrid()
+        {
+            Vector3 selectCellGridCenter = SnapToGrid(gridTransition.upperGrid.grid,selectedCellPos);
+            Vector3 selectCellGridToWorld = gridTransition.upperGrid.grid.CellToWorld(new Vector3Int((int)selectCellGridCenter.x,(int)selectCellGridCenter.y, (int)selectCellGridCenter.z)); 
+            cellIndicator.transform.position = selectCellGridToWorld;
+        }*/
 
 
         public void BuildTurret(TurretSO turretSo)
@@ -50,10 +65,9 @@ namespace GameState
                 Vector2 cellPos2d = new Vector2(selectedCellPos.Value.x, selectedCellPos.Value.z);
                 
                 GameObject turretGo = Instantiate(turretSo.Prefab, SnapToGrid(gridTransition.upperGrid.gameObject.GetComponent<Grid>(), selectedCellPos.Value), Quaternion.identity, turretManager.transform);
-                turretGo.name = selectedCellPos.ToString();
-                cellIndicator.Unlock(); 
+                turretGo.name = selectedCellPos.ToString(); 
                 gridTransition.upperGrid.SetContentAt(cellPos2d, turretGo);
-                
+                Debug.Log(gridTransition.upperGrid.UsedCells.Count); 
             }
         }
         public Vector3 SnapToGrid(Grid grid, Vector3 pos)
@@ -69,6 +83,11 @@ namespace GameState
 
         public void CancelSelection()
         {
+            if (selectedCellPos != null)
+            {
+                Vector2 selectedGridPos2d = new Vector2(selectedCellPos.Value.x, selectedCellPos.Value.z);
+                gridTransition.upperGrid.getCellAt(selectedGridPos2d).Highligh(false);
+            }
             selectedCellPos = null;
         }
     }
