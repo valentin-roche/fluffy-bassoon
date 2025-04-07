@@ -371,7 +371,7 @@ namespace Grids
 
         public Cell CreateCell(Vector2 pos, Status status = Status.Empty)
         {
-            Vector3 WorldPosition = grid.CellToWorld(new Vector3Int((int)pos.x, 0, (int)pos.y));
+            //Vector3 WorldPosition = grid.CellToWorld(new Vector3Int((int)pos.x, 0, (int)pos.y));
             GameObject cellInstance = Instantiate(cellPrefab, transform);
             cellInstance.name = "Cell("+pos.x+","+pos.y+")";
             //cellInstance.transform.InverseTransformPoint(WorldPosition);

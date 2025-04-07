@@ -18,21 +18,21 @@ namespace GameState
 
         private Vector3Int? selectedCellPos;
         [SerializeField]
-        private GameObject cellIndicator;
+        private CellIndicator cellIndicator;
 
         public bool OnClickLeftMouseToBuild()
         {
             if (gridTransition != null && gridTransition.upperGrid != null)
             {
-                if (selectedCellPos != null)
+                /*if (selectedCellPos != null)
                 {
                     Vector2 selectedGridPos2d = new Vector2(selectedCellPos.Value.x, selectedCellPos.Value.z);
                     gridTransition.upperGrid.getCellAt(selectedGridPos2d).Highligh(false);
                     selectedCellPos = null;
-                }
+                }*/
                 Vector3? mousePos = inputManager.GetSelectedMapPosition();
 
-                if(mousePos != null)
+                if(mousePos != null && mousePos.Value.y > -10f)
                 {
                     Vector3Int gridPos = gridTransition.upperGrid.gameObject.GetComponent<Grid>().WorldToCell(mousePos.Value);
                     Vector2 gridPos2d = new Vector2(gridPos.x, gridPos.z);
@@ -41,8 +41,9 @@ namespace GameState
                         if (gridTransition.upperGrid.isCellEmpty(gridPos2d))
                         {
                             selectedCellPos = gridPos;
-                            gridTransition.upperGrid.getCellAt(gridPos2d).Highligh(true);
-                            return true;
+                            //gridTransition.upperGrid.getCellAt(gridPos2d).Highligh(true);
+                            var prout = gridTransition.upperGrid.gameObject.GetComponent<Grid>().GetCellCenterWorld(gridPos);
+                            return cellIndicator.SetlockedCellPosition(prout);
                         }
                     }
                 }
@@ -85,8 +86,9 @@ namespace GameState
         {
             if (selectedCellPos != null)
             {
-                Vector2 selectedGridPos2d = new Vector2(selectedCellPos.Value.x, selectedCellPos.Value.z);
-                gridTransition.upperGrid.getCellAt(selectedGridPos2d).Highligh(false);
+                cellIndicator.Unlock();
+                /*Vector2 selectedGridPos2d = new Vector2(selectedCellPos.Value.x, selectedCellPos.Value.z);
+                gridTransition.upperGrid.getCellAt(selectedGridPos2d).Highligh(false);*/
             }
             selectedCellPos = null;
         }
