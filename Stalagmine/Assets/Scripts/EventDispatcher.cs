@@ -3,7 +3,20 @@ using UnityEngine;
 
 public class EventDispatcher : MonoBehaviour
 {   
-    public static EventDispatcher Instance;
+    private static EventDispatcher instance;
+    public static EventDispatcher Instance
+    {
+        get
+        {
+            if(instance == null)
+            {
+                var _instance = new GameObject("EventDispatcher");
+                _instance.AddComponent<EventDispatcher>();
+            }
+
+            return instance;
+        }
+    }
 
     public event Action<int> GetMoneyFromKill;
     public event Action OnCoreDestroyed;
@@ -14,15 +27,7 @@ public class EventDispatcher : MonoBehaviour
 
     private void Awake()
     {
-        Instance = new EventDispatcher();
-    }
-
-    private void Update()
-    {
-        if(Instance == null)
-        {
-            Instance = new EventDispatcher();
-        }
+        instance = this;
     }
 
     public void EnemyDied(Enemy enemy)
