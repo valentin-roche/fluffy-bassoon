@@ -13,6 +13,11 @@ namespace UI.Menus
         [SerializeField]
         private GameObject startMenuContainer;
 
+        [SerializeField]
+        private GameObject settingsButtonHighlight;
+        [SerializeField]
+        private GameObject closeSettingsButtonHighlight;
+
         private void Start()
         {
             fadeOutCanvas.DOFade(0, 0.5f);
@@ -29,6 +34,7 @@ namespace UI.Menus
         public void OpenSettings()
         {
             Display(false);
+            settingsButtonHighlight.SetActive(false);
         }
 
         public void Quit()
@@ -48,6 +54,12 @@ namespace UI.Menus
         {
             startMenuContainer.SetActive(display);
             settingsContainer.SetActive(!display);
+        }
+
+        public void CloseSettings()
+        {
+            Display(true);
+            closeSettingsButtonHighlight.SetActive(false);
         }
     }
 }
