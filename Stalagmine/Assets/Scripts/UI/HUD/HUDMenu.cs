@@ -231,6 +231,6 @@ public class HUDMenu : MonoBehaviour, ICommunicateWithGameplay
     private void OnGameOver()
     {
         gameOverCanvas.gameObject.SetActive(true);
-        gameOverCanvas.DOFade(1f, 1f);
+        gameOverCanvas.DOFade(1f, 1f).SetDelay(0.5f);
     }
 }
