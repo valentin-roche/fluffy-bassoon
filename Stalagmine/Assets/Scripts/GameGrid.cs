@@ -40,7 +40,7 @@ namespace Grids
         int[] triangles;
         bool[] trianglesDisabled;
 
-        private int enternalsRange = 2;
+        private int enternalsRange = 1;
 
         void Start()
         {
@@ -49,6 +49,8 @@ namespace Grids
             transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
             VoidCells = new List<Cell>();
             UsedCells = new List<Cell>();
+            EternalCells = new List<Cell>();
+            EmptyCells = new List<Cell>();
             voidCellsPos = new List<Vector2>();
             usedCellsPos = new List<Vector2>();
             eternalCellsPos = new List<Vector2>();
@@ -367,31 +369,35 @@ namespace Grids
                 Destroy(child.gameObject);
             }
 
+            usedCellsPos.Add(new Vector2(0, 0));
+
+            //Init eternal cells
+            for (int i = -enternalsRange; i <= enternalsRange; i++)
+            {
+                for (int j = -enternalsRange; j <= enternalsRange; j++)
+                {
+                    Vector2 tmpPos = new Vector2(i, j);
+                    if (usedCellsPos.Contains(tmpPos) == false && eternalCellsPos.Contains(tmpPos) == false)
+                    {
+                        eternalCellsPos.Add(tmpPos);
+                    }                 
+                }
+            }
+
             // Assign Void Cells
             while (voidCellsPos.Count < InitialVoidNum)
             {
                 Vector2 RandomPos = GetRandomCellPos();
-                if (voidCellsPos.Contains(RandomPos) == false)
+                if (voidCellsPos.Contains(RandomPos) == false && eternalCellsPos.Contains(RandomPos) == false && usedCellsPos.Contains(RandomPos) == false )
                 {
                     voidCellsPos.Add(RandomPos);
                 }
             }
 
-            usedCellsPos.Add(new Vector2(0, 0));
-
-            //Init eternal cells
-            for (int i = -enternalsRange; i < enternalsRange; i++)
-            {
-                for (int j = -enternalsRange; j < enternalsRange; j++)
-                {
-                    eternalCellsPos.Add(new Vector2(i, j));
-                }
-            }
-
             //Init cells
-            for (int i = -gridSize.x; i < gridSize.x; i++)
+            for (int i = -gridSize.x; i <= gridSize.x; i++)
             {
-                for (int j = -gridSize.y; j < gridSize.y; j++)
+                for (int j = -gridSize.y; j <= gridSize.y; j++)
                 {
                     Vector2 gridPosition = new Vector2(i, j);
                     if (voidCellsPos.Contains(gridPosition))

@@ -14,9 +14,13 @@ namespace Grids
         public int InitialVoidNum = 5;
         [SerializeField]
         public int VoidPas = 2;
-
+        [SerializeField]
+        public int minNbOfCase = 2;
+       
         private int minRange;
         private int maxRange;
+
+        private int layerLevel = 1;
 
         private void Start()
         {
@@ -30,6 +34,8 @@ namespace Grids
             lowerGrid.InitialVoidNum = 5;
             //PrepareNextGrid(lowerGrid);
             lowerGrid.gameObject.SetActive(true);
+
+            EventDispatcher.Instance.LayerDestroyed(layerLevel);
 
             minRange = (int)-upperGrid.gridSize.x;
             maxRange = (int)upperGrid.gridSize.y;
@@ -66,6 +72,7 @@ namespace Grids
         public void DestroyBoard()
         {
             Destroy(upperGrid.gameObject);
+            
 
             upperGrid = lowerGrid;
 
@@ -76,8 +83,19 @@ namespace Grids
 
             lowerGrid = lowerGo.GetComponent<GameGrid>();
 
-            lowerGrid.InitialVoidNum = upperGrid.InitialVoidNum + VoidPas;
+            if (InitialVoidNum + VoidPas <= (lowerGrid.gridSize.x * lowerGrid.gridSize.y - 9 - minNbOfCase))
+            {
+                lowerGrid.InitialVoidNum = upperGrid.InitialVoidNum + VoidPas;
+            }
+            else
+            {
+                lowerGrid.InitialVoidNum = upperGrid.InitialVoidNum;
+            }
+
             lowerGrid.gameObject.SetActive(true);
+
+            layerLevel++;
+            EventDispatcher.Instance.LayerDestroyed(layerLevel);
         }
 
         //tmp
