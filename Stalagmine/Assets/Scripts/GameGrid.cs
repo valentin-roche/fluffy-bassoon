@@ -21,6 +21,8 @@ namespace Grids
         public List<Cell> EternalCells; 
         private Mesh mesh;
 
+        public bool IsLowerGrid;
+
         
         public static List<Vector2> Directions = new List<Vector2>
         {
@@ -40,8 +42,8 @@ namespace Grids
         void Start()
         {
             // Set to center
-            float centeringOffset = -gridSize.x * grid.cellSize.x / 4;
-            transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
+            //float centeringOffset = -gridSize.x * grid.cellSize.x / 4;
+            //transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
             VoidCells = new List<Cell>();
             UsedCells = new List<Cell>();
 
@@ -79,6 +81,7 @@ namespace Grids
         public void RefreshMesh()
         {
             Mesh newMesh = new Mesh();
+            newMesh.name = mesh?.name;
 
             // Handle vertices
             Vector3[] vertices = new Vector3[(gridSize.x + 1) * (gridSize.y + 1)];
@@ -131,6 +134,11 @@ namespace Grids
             s.FindProperty("m_IsReadable").boolValue = true;
             GetComponent<MeshFilter>().mesh = mesh;
             GetComponent<MeshCollider>().sharedMesh = mesh;
+
+            //if(!IsLowerGrid)
+            //    transform.position = Vector3.zero;
+            //else
+            //    transform.position = new Vector3(0, -20, 0);
         }
 
         private Vector2 GetRandomCellPos()
@@ -250,6 +258,10 @@ namespace Grids
         {
             Vector3Int gridPosition = new Vector3Int(x, 0, y);
             Vector3 coord = grid.CellToWorld(gridPosition);
+
+            coord = new Vector3(coord.x - (gridSize.x * grid.cellSize.x / 2f), 0, coord.z - (gridSize.y * grid.cellSize.z / 2f));
+
+            coord.y = 0;
             return coord;
         }
 

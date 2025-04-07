@@ -15,6 +15,7 @@ public class CameraMovement : MonoBehaviour
 
     public Light GlobalSpotlight;
     public Light CameraSpotlight;
+    bool camSpotlight = false;
     public Camera Camera;
 
     Transform cameraTransform;
@@ -58,10 +59,10 @@ public class CameraMovement : MonoBehaviour
 
                 if (positionIndex > 1)
                 {
-                    CameraSpotlight.enabled = true;
+                    camSpotlight = true;
                     GlobalSpotlight.enabled = false;
                 }
-                StartCoroutine(MoveCamera(CameraPositions[positionIndex]));
+                StartCoroutine(MoveCamera(CameraPositions[positionIndex], camSpotlight));
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
@@ -74,10 +75,10 @@ public class CameraMovement : MonoBehaviour
 
                 if (positionIndex < 2)
                 {
-                    CameraSpotlight.enabled = false;
+                    camSpotlight = false;
                     GlobalSpotlight.enabled = true;
                 }
-                StartCoroutine(MoveCamera(CameraPositions[positionIndex]));
+                StartCoroutine(MoveCamera(CameraPositions[positionIndex], camSpotlight));
             }
         }
     }
@@ -99,18 +100,30 @@ public class CameraMovement : MonoBehaviour
         isRotating = false;
     }
 
-    IEnumerator MoveCamera(Transform transform)
+    IEnumerator MoveCamera(Transform transform, bool lightOn)
     {
         isMoving = true;
         float time = 0;
         Quaternion rotStartValue = cameraTransform.rotation;
         Vector3 posStartValue = cameraTransform.position;
 
+        float startIntensity = CameraSpotlight.intensity;
+
 
         while (time < duration)
         {
             cameraTransform.rotation = Quaternion.Lerp(rotStartValue, transform.rotation, curve.Evaluate(time / duration));
             cameraTransform.position = Vector3.Lerp(posStartValue, transform.position, curve.Evaluate(time / duration));
+
+            if (lightOn)
+            {
+                CameraSpotlight.intensity = Mathf.Lerp(startIntensity, 5000, curve.Evaluate(time / duration));
+            }
+            else
+            {
+                CameraSpotlight.intensity = Mathf.Lerp(startIntensity, 0, curve.Evaluate(time / duration));
+            }
+
             time += Time.deltaTime;
             yield return null;
         }

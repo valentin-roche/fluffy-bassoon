@@ -6,7 +6,7 @@ namespace Grids
     {
         public GameGrid upperGrid { get; private set; }
         public  GameGrid lowerGrid { get; private set; }
-        private Vector3 lowerGridOffset = new Vector3(0, 40 , 0);
+        private Vector3 lowerGridOffset = new Vector3(0, 20 , 0);
         [SerializeField]
         public GameGrid GameGridPrefab;
         [SerializeField]
@@ -14,12 +14,24 @@ namespace Grids
 
         private void Start()
         {
-            upperGrid = Instantiate<GameGrid>(GameGridPrefab, GameGridPrefab.transform.position, Quaternion.identity, this.transform);
+            /*GameObject upperGridParent = new();
+            upperGridParent.transform.parent = transform;
+            upperGridParent.transform.localPosition = Vector3.zero;*/
+
+            upperGrid = Instantiate<GameGrid>(GameGridPrefab, transform.position, Quaternion.identity, this.transform);
             upperGrid.InitialVoidNum = 5;
+            upperGrid.IsLowerGrid = false;
             upperGrid.gameObject.SetActive(true);
-            lowerGrid = Instantiate(GameGridPrefab, upperGrid.transform.position - lowerGridOffset, Quaternion.identity, this.transform);
-            upperGrid.InitialVoidNum = 5;
-            PrepareNextGrid(lowerGrid);
+            var nextLayer = upperGrid.transform.position;
+
+            /*GameObject lowerGridParent = new();
+            lowerGridParent.transform.parent = transform;
+            lowerGridParent.transform.localPosition = Vector3.zero + new Vector3(0, -20, 0);*/
+
+            lowerGrid = Instantiate<GameGrid>(GameGridPrefab, transform.position - new Vector3(0, 20, 0), Quaternion.identity, this.transform);
+            lowerGrid.InitialVoidNum = 5;
+            lowerGrid.IsLowerGrid = true;
+            //PrepareNextGrid(lowerGrid);
             lowerGrid.gameObject.SetActive(true);
         }
 
