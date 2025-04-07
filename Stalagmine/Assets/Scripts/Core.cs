@@ -12,6 +12,9 @@ public class Core : Building
     [SerializeField] AudioSource CoreDeathAudio;
     [SerializeField] AudioSource CoreHitAudio;
 
+    [SerializeField] Color CoreHitColor;
+    bool CoreDamaged = false;
+
     private void Start()
     {
         HealthManager = new(100);
@@ -22,9 +25,38 @@ public class Core : Building
         HealthManager.LoseHealth(damage);
         CoreHitAudio.Play();
 
+        if(!CoreDamaged && HealthManager.Health < HealthManager.MaxHealth / 2)
+        {
+            StartCoroutine(DamagedCore());
+        }
+
         if (HealthManager.IsDead())
         {
             DestroyCore();
+        }
+    }
+
+    IEnumerator DamagedCore()
+    {
+        CoreDamaged = true;
+        GetComponentInChildren<Light>().color = CoreHitColor;
+        GetComponent<ParticleSystem>().Play();
+        while (CoreDamaged)
+            yield return LightDamaged();
+    }
+
+    public AnimationCurve lightCurve;
+
+    IEnumerator LightDamaged()
+    {
+        float time = 0;
+        float maxIntensity = 25;
+
+        while (time < 3)
+        {
+            GetComponentInChildren<Light>().intensity = Mathf.Lerp(0, maxIntensity,lightCurve.Evaluate(time / 3));
+            time += Time.deltaTime;
+            yield return null;
         }
     }
 
@@ -40,6 +72,7 @@ public class Core : Building
 
     void DestroyCore()
     {
+        CoreDamaged = false;
         //CoreDestroyed.Invoke();
         EventDispatcher.Instance.CoreDestroyed();
 
@@ -76,7 +109,7 @@ public class Core : Building
 
 class HealthManager
 {
-    int MaxHealth { get; }
+    public int MaxHealth { get; }
     public int Health { get; set; }
 
     public HealthManager(int maxHealth)
