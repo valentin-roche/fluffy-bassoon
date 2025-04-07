@@ -282,6 +282,20 @@ namespace Grids
                     return usedCell;
                 }
             }
+            foreach (Cell emptyCell in EmptyCells)
+            {
+                if (emptyCell.Position == pos)
+                {
+                    return emptyCell;
+                }
+            }
+            foreach (Cell eternalCell in EternalCells)
+            {
+                if (eternalCell.Position == pos)
+                {
+                    return eternalCell;
+                }
+            }
             return CreateCell(pos);
         }
 
