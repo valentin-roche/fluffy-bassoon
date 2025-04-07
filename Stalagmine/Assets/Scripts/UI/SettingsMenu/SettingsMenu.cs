@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour
@@ -8,10 +9,20 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField]
     private Slider sfxSlider;
 
+    [SerializeField]
+    private AudioMixer audioMixer;
+
     void Start()
     {
         musicSlider.onValueChanged.AddListener(OnMusicValueChanged);
         sfxSlider.onValueChanged.AddListener(OnSfxValueChanged);
+
+        float musicMixerValue;
+        float sfxMixerValue;
+        audioMixer.GetFloat("MusicVolume", out musicMixerValue);
+        musicSlider.value = Mathf.Pow(10, (musicMixerValue / 20f));
+        audioMixer.GetFloat("SfxVolume", out sfxMixerValue);
+        sfxSlider.value = Mathf.Pow(10, (sfxMixerValue / 20f));
     }
 
     private void OnDestroy()
@@ -22,11 +33,11 @@ public class SettingsMenu : MonoBehaviour
 
     private void OnMusicValueChanged(float value)
     {
-
+        audioMixer.SetFloat("MusicVolume", Mathf.Log10(value)*20);
     }
 
     private void OnSfxValueChanged(float value)
     {
-
+        audioMixer.SetFloat("SfxVolume", Mathf.Log10(value) * 20);
     }
 }
