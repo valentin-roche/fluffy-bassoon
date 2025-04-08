@@ -16,12 +16,12 @@ public class CellIndicator : MonoBehaviour
         Vector3? pos = inputManager.GetSelectedMapPosition();
         if (pos.HasValue && IsInBound(pos.Value))
         {
-            Vector3Int cellPosinGrid = gridTransition.upperGrid.gameObject.GetComponent<Grid>().WorldToCell(new Vector3Int((int)pos.Value.x, (int)pos.Value.y, (int)pos.Value.z));
+            Vector3Int cellPosinGrid = gridTransition.upperGrid.gameObject.GetComponent<Grid>().WorldToCell(pos.Value + new Vector3(3.5f, 0, 3.5f));
 
-            Vector3 cellPosInWorld = gridTransition.upperGrid.gameObject.GetComponent<Grid>().GetCellCenterWorld(cellPosinGrid);
+            Vector3 cellPosInWorld = gridTransition.upperGrid.gameObject.GetComponent<Grid>().CellToWorld(cellPosinGrid);
             cellPosInWorld.y = 0.55f;
-            cellPosInWorld.x -= 0.65f;
-            cellPosInWorld.z -= 0.65f;
+            //cellPosInWorld.x -= 0.65f;
+            //cellPosInWorld.z -= 0.65f;
             if (cellPosInWorld != null)
             {
                 transform.position = cellPosInWorld;
@@ -31,6 +31,9 @@ public class CellIndicator : MonoBehaviour
 
     private bool IsInBound(Vector3 pos)
     {
+        //if (Mathf.Abs(pos.x) >= Mathf.Abs(gridTransition.upperGrid.gridSize.x * gridTransition.upperGrid.gameObject.GetComponent<Grid>().cellSize.x) || Mathf.Abs(pos.z) >= Mathf.Abs(gridTransition.upperGrid.gridSize.y * gridTransition.upperGrid.gameObject.GetComponent<Grid>().cellSize.z))
+        //    return false;
+
         return pos.y > -10f;
     }
     public void Lock()

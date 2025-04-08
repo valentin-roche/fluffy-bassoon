@@ -45,8 +45,8 @@ namespace Grids
         void Start()
         {
             // Set to center
-            float centeringOffset = -gridSize.x * grid.cellSize.x / 4;
-            transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
+            //float centeringOffset = -gridSize.x * grid.cellSize.x / 4;
+            //transform.position = new Vector3(centeringOffset, transform.position.y, centeringOffset);
             VoidCells = new List<Cell>();
             UsedCells = new List<Cell>();
             EternalCells = new List<Cell>();
@@ -255,6 +255,9 @@ namespace Grids
         {
             Vector3Int gridPosition = new Vector3Int(x, 0, y);
             Vector3 coord = grid.CellToWorld(gridPosition);
+            coord = new Vector3(coord.x - (gridSize.x * grid.cellSize.x / 2f), 0, coord.z - (gridSize.y * grid.cellSize.z / 2f));
+
+            coord.y = 0;
             return coord;
         }
 
@@ -354,7 +357,7 @@ namespace Grids
             cellInstance.name = "Cell("+pos.x+","+pos.y+")";
             //cellInstance.transform.InverseTransformPoint(WorldPosition);
             cellInstance.transform.position = new Vector3(pos.x * grid.cellSize.x, grid.transform.position.y, pos.y * grid.cellSize.z);
-            cellInstance.transform.localScale = new Vector3(grid.cellSize.x, 1f, grid.cellSize.z);
+            cellInstance.transform.localScale = new Vector3(grid.cellSize.x, .01f, grid.cellSize.z);
             Cell cell = cellInstance.GetComponent<Cell>();
             cell.Position = pos;
             cell.SetStatus(status);

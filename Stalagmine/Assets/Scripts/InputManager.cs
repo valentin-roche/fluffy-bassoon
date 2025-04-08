@@ -25,6 +25,9 @@ public class InputManager : MonoBehaviour
         {
             lastPosition = null;
         }
+
+        
+
         return lastPosition;
     }
 

@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da08a63912741747a65d3ef8c04eb40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: {x: 7, y: 7}
+  gridSize: {x: 9, y: 9}
   cellPrefab: {fileID: 906104825287749346, guid: ece65a10f37e8ea4596f6bde97e399c1, type: 3}
   grid: {fileID: 7279191907725477562}
   InitialVoidNum: 5

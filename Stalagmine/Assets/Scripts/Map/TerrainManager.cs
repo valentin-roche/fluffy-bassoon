@@ -27,14 +27,14 @@ namespace GameState
                 Vector3? mousePos = inputManager.GetSelectedMapPosition();
                 if(mousePos != null && mousePos.Value.y > -10f )
                 {
-                    Vector3Int gridPos = gridTransition.upperGrid.gameObject.GetComponent<Grid>().WorldToCell(mousePos.Value);
+                    Vector3Int gridPos = gridTransition.upperGrid.gameObject.GetComponent<Grid>().WorldToCell(mousePos.Value + new Vector3(3.5f, 0, 3.5f));
                     Vector2 gridPos2d = new Vector2(gridPos.x, gridPos.z);
                     if (gridTransition.upperGrid.isVectorInGridGame(gridPos2d))
                     {
                         if (gridTransition.upperGrid.isCellEmpty(gridPos2d))
                         {
                             selectedCellPos = gridPos;
-                            return cellIndicator.SetlockedCellPosition(gridTransition.upperGrid.gameObject.GetComponent<Grid>().GetCellCenterWorld(gridPos)); 
+                            return cellIndicator.SetlockedCellPosition(gridTransition.upperGrid.gameObject.GetComponent<Grid>().CellToWorld(gridPos)); 
                         }
                     }
                 }
@@ -60,7 +60,7 @@ namespace GameState
         {
             if (selectedCellPos != null)
             {
-                pos = grid.GetCellCenterWorld(selectedCellPos.Value);
+                pos = grid.CellToWorld(selectedCellPos.Value);
                 pos.y = 0;
             }
 

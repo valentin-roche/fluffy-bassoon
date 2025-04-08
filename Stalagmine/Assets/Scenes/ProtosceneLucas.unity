@@ -308,6 +308,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6368492258363036313, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6500984555270380490, guid: 867417bd6c697e14490eaf1785332880, type: 3}
       propertyPath: m_LocalScale.x
       value: 6
@@ -344,6 +348,10 @@ PrefabInstance:
       propertyPath: sceneCamera
       value: 
       objectReference: {fileID: 1634759069}
+    - target: {fileID: 8994050734358139473, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+      propertyPath: LayerParent
+      value: 
+      objectReference: {fileID: 266244703}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8956164626969095617, guid: 867417bd6c697e14490eaf1785332880, type: 3}
@@ -359,6 +367,11 @@ PrefabInstance:
 --- !u!108 &266244702 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 2778590570734827640, guid: 867417bd6c697e14490eaf1785332880, type: 3}
+  m_PrefabInstance: {fileID: 266244701}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &266244703 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5151031732271375911, guid: 867417bd6c697e14490eaf1785332880, type: 3}
   m_PrefabInstance: {fileID: 266244701}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &734994265 stripped
