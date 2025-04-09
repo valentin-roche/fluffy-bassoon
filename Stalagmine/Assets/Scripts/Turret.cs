@@ -145,6 +145,9 @@ public class Turret : Building
         {
             ShootAction();
         }
+
+        if(transform.position.y < -22f)
+            Destroy(gameObject);
     }
 
     void ShootAtTarget()

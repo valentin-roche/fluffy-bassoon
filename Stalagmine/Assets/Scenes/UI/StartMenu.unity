@@ -244,6 +244,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4158867046479882031, guid: 4a45e6f0cbb087244a99004e434546f0, type: 3}
+      propertyPath: MusicClips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4158867046479882031, guid: 4a45e6f0cbb087244a99004e434546f0, type: 3}
+      propertyPath: 'MusicClips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: d869037e8f7451b4cbd14744c5c85978, type: 3}
     - target: {fileID: 6038859338082732199, guid: 4a45e6f0cbb087244a99004e434546f0, type: 3}
       propertyPath: m_Name
       value: AudioManager
@@ -620,7 +628,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TITRE DU JEU
+  m_text: GTFD!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1466,6 +1474,8 @@ PrefabInstance:
     - {fileID: 1935004079277500169, guid: d516579a34c5f3f43af7535c326d50a4, type: 3}
     - {fileID: 6682396894877128714, guid: d516579a34c5f3f43af7535c326d50a4, type: 3}
     - {fileID: 4453160357244229868, guid: d516579a34c5f3f43af7535c326d50a4, type: 3}
+    - {fileID: 2337249333804004315, guid: d516579a34c5f3f43af7535c326d50a4, type: 3}
+    - {fileID: 2578641137622374606, guid: d516579a34c5f3f43af7535c326d50a4, type: 3}
     m_RemovedGameObjects:
     - {fileID: 4255814506815256589, guid: d516579a34c5f3f43af7535c326d50a4, type: 3}
     - {fileID: 6607123061253130582, guid: d516579a34c5f3f43af7535c326d50a4, type: 3}

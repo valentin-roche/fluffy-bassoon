@@ -14,7 +14,8 @@ public class CameraMovement : MonoBehaviour
     int positionIndex = 0;
 
     public Light GlobalSpotlight;
-    public Light CameraSpotlight;
+    public Light DirectLight;
+    bool camSpotlight = false;
     public Camera Camera;
 
     Transform cameraTransform;
@@ -49,7 +50,7 @@ public class CameraMovement : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.W))
             {
-                if(positionIndex+1 >= CameraPositions.Length)
+                if (positionIndex + 1 >= CameraPositions.Length)
                 {
                     return;
                 }
@@ -58,14 +59,14 @@ public class CameraMovement : MonoBehaviour
 
                 if (positionIndex > 1)
                 {
-                    CameraSpotlight.enabled = true;
+                    camSpotlight = true;
                     GlobalSpotlight.enabled = false;
                 }
-                StartCoroutine(MoveCamera(CameraPositions[positionIndex]));
+                StartCoroutine(MoveCamera(CameraPositions[positionIndex], camSpotlight));
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
-                if (positionIndex-1 < 0)
+                if (positionIndex - 1 < 0)
                 {
                     return;
                 }
@@ -74,10 +75,10 @@ public class CameraMovement : MonoBehaviour
 
                 if (positionIndex < 2)
                 {
-                    CameraSpotlight.enabled = false;
+                    camSpotlight = false;
                     GlobalSpotlight.enabled = true;
                 }
-                StartCoroutine(MoveCamera(CameraPositions[positionIndex]));
+                StartCoroutine(MoveCamera(CameraPositions[positionIndex], camSpotlight));
             }
         }
     }
@@ -88,9 +89,9 @@ public class CameraMovement : MonoBehaviour
         float time = 0;
         Quaternion startValue = transform.rotation;
 
-        while(time < duration)
+        while (time < duration)
         {
-            transform.rotation = Quaternion.Lerp(startValue, targetvalue,curve.Evaluate(time/ duration));
+            transform.rotation = Quaternion.Lerp(startValue, targetvalue, curve.Evaluate(time / duration));
             time += Time.deltaTime;
             yield return null;
         }
@@ -99,18 +100,40 @@ public class CameraMovement : MonoBehaviour
         isRotating = false;
     }
 
-    IEnumerator MoveCamera(Transform transform)
+    IEnumerator MoveCamera(Transform transform, bool lightOn)
     {
         isMoving = true;
         float time = 0;
         Quaternion rotStartValue = cameraTransform.rotation;
         Vector3 posStartValue = cameraTransform.position;
 
+        float startIntensity = DirectLight.intensity;
+        float startCamSize = Camera.orthographicSize;
+
 
         while (time < duration)
         {
             cameraTransform.rotation = Quaternion.Lerp(rotStartValue, transform.rotation, curve.Evaluate(time / duration));
             cameraTransform.position = Vector3.Lerp(posStartValue, transform.position, curve.Evaluate(time / duration));
+
+            if (positionIndex > 0)
+            {
+                Camera.orthographicSize = Mathf.Lerp(startCamSize, 55, curve.Evaluate(time / duration));
+            }
+            else
+            {
+                Camera.orthographicSize = Mathf.Lerp(startCamSize, 30, curve.Evaluate(time / duration));
+            }
+
+            if (lightOn)
+            {
+                DirectLight.intensity = Mathf.Lerp(startIntensity, 2, curve.Evaluate(time / duration));
+            }
+            else
+            {
+                DirectLight.intensity = Mathf.Lerp(startIntensity, 0, curve.Evaluate(time / duration));
+            }
+
             time += Time.deltaTime;
             yield return null;
         }

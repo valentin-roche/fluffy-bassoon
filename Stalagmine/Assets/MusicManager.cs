@@ -10,5 +10,15 @@ public class MusicManager : MonoBehaviour
     {
         audioSource.clip = MusicClips[0];
         audioSource.Play();
+
+
+    }
+
+    public void DeathMusic()
+    {
+        audioSource.Stop();
+        audioSource.clip = MusicClips[1];
+        audioSource.Play();
+
     }
 }

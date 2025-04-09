@@ -1,3 +1,4 @@
+using Grids;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,12 +8,14 @@ public class WaveManager : MonoBehaviour
 {
     public EnemyGroupSO[] enemyGroups;
 
-    [SerializeField] int waveValue = 50;
+    [SerializeField] int waveValue = 10;
 
     public void SpawnWave(int waveValue)
     {
         int spawnedValue = 0;
         List<EnemySO> enemyList = new();
+
+        waveValue += GetComponentInChildren<GridTransition>().layerLevel * 5;
 
         while(spawnedValue < waveValue)
         {

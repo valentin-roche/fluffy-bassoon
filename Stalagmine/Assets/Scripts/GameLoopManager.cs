@@ -1,3 +1,4 @@
+using Grids;
 using System.Collections;
 using UnityEngine;
 
@@ -41,14 +42,15 @@ public class GameLoopManager : MonoBehaviour
         }
         if (IsDead)
         {
-
+            IsPlaying = false;
         }
     }
     IEnumerator DestroyLayer()
     {
         var toDestroy = LayerParent.transform.GetChild(0);
         var posFin = toDestroy.position;
-        toDestroy.gameObject.SetActive(false);
+        Destroy(toDestroy.gameObject);
+        //toDestroy.gameObject.SetActive(false);
         //if (toDestroy != null)
         //    toDestroy.GetComponent<MeshDestroy>().DestroyMesh();
 
@@ -73,5 +75,7 @@ public class GameLoopManager : MonoBehaviour
             yield return null;
         }
         toGetUp.position = posFin;
+
+        GetComponentInChildren<GridTransition>().PushLowerGrid();
     }
 }

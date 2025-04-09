@@ -75,6 +75,7 @@ public class Core : Building
     {
         CoreDamaged = false;
         //CoreDestroyed.Invoke();
+        transform.parent.GetComponentInChildren<MusicManager>().DeathMusic();
         EventDispatcher.Instance.CoreDestroyed();
 
         if (!isDestroyed)

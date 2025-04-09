@@ -15,6 +15,6 @@ MonoBehaviour:
   enemyType: 2
   Health: 250
   Speed: 0.5
-  Damage: 12
-  Reward: 5
+  Damage: 10
+  Reward: 20
   Prefab: {fileID: 737052925703228195, guid: a10714c5280ec3344a825e201a743016, type: 3}

@@ -14,7 +14,7 @@ public class CellIndicator : MonoBehaviour
     void Update()
     {
         Vector3? pos = inputManager.GetSelectedMapPosition();
-        if (pos.HasValue && IsInBound(pos.Value))
+        if (pos.HasValue && IsInBound(pos.Value) && gridTransition.upperGrid != null)
         {
             Vector3Int cellPosinGrid = gridTransition.upperGrid.gameObject.GetComponent<Grid>().WorldToCell(pos.Value + new Vector3(3.5f, 0, 3.5f));
 

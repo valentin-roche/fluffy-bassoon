@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 8910747697951570455}
   - component: {fileID: 8731550439192179857}
   - component: {fileID: 1539334455567345440}
+  - component: {fileID: 432211063866416960}
+  - component: {fileID: -8765911165393472427}
   m_Layer: 0
   m_Name: Minigun
   m_TagString: Untagged
@@ -247,6 +249,54 @@ MonoBehaviour:
   TurretSO: {fileID: 11400000, guid: 04cb1821948738d4f8c6d359689b8caa, type: 2}
   Spotlight: {fileID: 5998244650469707175}
   Gunlight: {fileID: 2247583196837152676}
+--- !u!54 &432211063866416960
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010156534366}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 122
+  m_CollisionDetection: 1
+--- !u!65 &-8765911165393472427
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010156534366}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.9841569, y: 0.6337276, z: 0.9217757}
+  m_Center: {x: 0, y: 0.3065894, z: 0.09309788}
 --- !u!1 &1000011939376292
 GameObject:
   m_ObjectHideFlags: 0

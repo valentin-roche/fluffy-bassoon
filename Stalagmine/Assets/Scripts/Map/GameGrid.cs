@@ -122,8 +122,8 @@ namespace Grids
             newMesh.triangles = triangles;
             newMesh.RecalculateNormals();
             mesh = newMesh;
-            SerializedObject s = new SerializedObject(mesh);
-            s.FindProperty("m_IsReadable").boolValue = true;
+            //SerializedObject s = new SerializedObject(mesh);
+            //s.FindProperty("m_IsReadable").boolValue = true;
             GetComponent<MeshFilter>().mesh = mesh;
             GetComponent<MeshCollider>().sharedMesh = mesh;
         }
